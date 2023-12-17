@@ -1,25 +1,22 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
-// Network credentials
 
 const char* ssid = "privatered";
 const char* password = "vfpk0135";
 
-// Pins for the ultrasonic sensor
 const int trigPin = 3;
 const int echoPin = 2;
 
-// MQTT Broker settings
 const char* mqtt_broker = "192.168.11.213";
 const int mqtt_port = 1883;
-const char* mqtt_topic = "sensor/distance";
+const char* mqtt_topic = "sensor1/distance";
 
-WiFiClient espClient;
-PubSubClient mqttClient(espClient);
+WiFiClient espClientSensor2;
+PubSubClient mqttClient(espClientSensor2);
 
 void setup() {
-  Serial.begin(19600);
+  Serial.begin(19200);
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
 
@@ -42,7 +39,7 @@ void loop() {
     mqttClient.publish(mqtt_topic, String(distance).c_str());
   }
 
-  delay(5000);  // Wait 5 seconds between measurements
+  delay(5000);  
 }
 
 void connectToWiFi() {
