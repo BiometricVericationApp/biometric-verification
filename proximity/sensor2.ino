@@ -10,7 +10,7 @@ const int echoPin = 2;
 
 const char* mqtt_broker = "192.168.11.213";
 const int mqtt_port = 1883;
-const char* mqtt_topic = "sensor1/distance";
+const char* mqtt_topic = "sensor2/distance";
 
 WiFiClient espClientSensor2;
 PubSubClient mqttClient(espClientSensor2);
