@@ -9,7 +9,7 @@ const char* ssid = "privatered";
 const char* password = "vfpk0135";
 
 // MQTT Broker settings
-const char* mqtt_broker = "192.168.11.213";
+const char* mqtt_broker = "192.168.249.213";
 const int mqtt_port = 1883;
 const char* mqtt_topic1 = "sensor1/distance"; 
 const char* mqtt_topic2 = "sensor2/distance"; 
@@ -95,9 +95,9 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 void checkForPresenceAndDirection(float d1, float d2, float range) {
   if (d1 <= range || d2 <= range) {
     if (d1 < d2) {
-      lcdPrint("Persona izquierda");
+      lcdPrint("izquierda: " + String(d1) + " cm");
     } else {
-      lcdPrint("Persona derecha");
+      lcdPrint("derecha: " + String(d2) + " cm");
     }
   } else {
     lcdPrint("No hay persona");
