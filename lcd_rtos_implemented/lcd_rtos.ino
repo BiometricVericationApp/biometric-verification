@@ -15,6 +15,9 @@ const int mqtt_port = 1883;
 const char* mqtt_topic1 = "sensor1/distance"; 
 const char* mqtt_topic2 = "sensor2/distance"; 
 
+const int ledPins[] = {12, 14, 27, 26, 33, 32, 36, 34, 16, 17}; 
+const int numLeds = 10;
+
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
 LiquidCrystal_I2C lcd(0x27, 16, 2); 
@@ -38,15 +41,33 @@ void setup() {
   lcd.init();
   lcd.backlight();
 
-  xSemaphoreLCD = xSemaphoreCreateMutex(); // Crear semáforo para el LCD
+  xSemaphoreLCD = xSemaphoreCreateMutex(); 
 
   xTaskCreate(WiFiTask, "WiFi Task", 10000, NULL, 1, NULL);
   xTaskCreate(MQTTTask, "MQTT Task", 10000, NULL, 1, NULL);
   xTaskCreate(LCDDisplayTask, "LCD Display Task", 10000, NULL, 1, NULL);
+  for(int i = 0; i < numLeds; i++) {
+    pinMode(ledPins[i], OUTPUT);
+  }
+}
+
+void turnOnLeds(int numLedsToTurnOn) {
+  for(int i = 0; i < numLeds; i++) {
+    if (i < numLedsToTurnOn) {
+      digitalWrite(ledPins[i], HIGH);
+    } else {
+      digitalWrite(ledPins[i], LOW);
+    }
+  }
+}
+
+void turnOffLeds() {
+  for(int i = 0; i < numLeds; i++) {
+    digitalWrite(ledPins[i], LOW);
+  }
 }
 
 void loop() {
-  // No se utiliza el loop principal
 }
 
 void WiFiTask(void *pvParameters) {
@@ -80,7 +101,7 @@ void MQTTTask(void *pvParameters) {
 void LCDDisplayTask(void *pvParameters) {
   for (;;) {
     if (distance1 > 0 && distance2 > 0) {
-      checkForPresenceAndDirection(distance1, distance2, detectionRange);
+      checkForPresenceAndDirection(distance1, distance2);
     }
     vTaskDelay(2000 / portTICK_PERIOD_MS);
   }
@@ -99,38 +120,40 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   }
 }
 
-void checkForPresenceAndDirection(float d1, float d2, float range) {
-    if (d1 <= range && d2 <= range) {
-        float sensorDistance = 30.0; // en cm
-        float angleBetweenSensors = 45.0; // en grados
+void checkForPresenceAndDirection(float d1, float d2) {
+    const float range = 50.0; 
+    float proximity;
+    bool isLeft = false, isRight = false;
 
-        float cosC = (d1 * d1 + d2 * d2 - sensorDistance * sensorDistance) / (2 * d1 * d2);
-
-        // Comprobar que cosC está en el rango válido para el arcocoseno
-        if (cosC > 1.0) cosC = 1.0;
-        if (cosC < -1.0) cosC = -1.0;
-
-        float angleC = acos(cosC);
-
-        float leftPercentage = 0.0;
-        float rightPercentage = 0.0;
-
-        if (angleC < PI / 2) {
-            leftPercentage = 100.0 * (1 - angleC / (PI / 2));
+    if (d1 <= range || d2 <= range) {
+        if (d1 <= range && d2 <= range) {
+            proximity = min(d1, d2);
+            isLeft = d1 < d2;
+            isRight = d2 < d1;
+        } else if (d1 <= range) {
+            proximity = d1;
+            isLeft = true;
         } else {
-            rightPercentage = 100.0 * (1 - (PI - angleC) / (PI / 2));
+            proximity = d2;
+            isRight = true;
         }
 
-        String line1 = "Left: " + String(leftPercentage, 2) + "%";
-        String line2 = "Right: " + String(rightPercentage, 2) + "%";
+        int ledsToTurnOn = map(proximity, 0, range, numLeds, 0);
+        ledsToTurnOn = constrain(ledsToTurnOn, 0, numLeds);
+        turnOnLeds(ledsToTurnOn);
 
+        String direction = isLeft ? "Left" : (isRight ? "Right" : "Center");
+        String line1 = "Prox: " + String(proximity, 2) + "cm";
+        String line2 = "Dir: " + direction + " - LEDs: " + String(ledsToTurnOn);
         lcdPrint(line1, 1);
         lcdPrint(line2, 2);
     } else {
-        lcdPrint("Fuera de rango", 1);
+        lcdPrint("No Movement", 1);
         lcdPrint("", 2);
+        turnOffLeds();
     }
 }
+
 
 
 void reconnectMQTT() {
@@ -160,8 +183,8 @@ void lcdPrint(String message, int line) {
       lcd.print(" ");
     }
     xSemaphoreGive(xSemaphoreLCD);
-    // Reducir o eliminar este delay según sea necesario
-    delay(100); // Ajusta este valor según tus necesidades
+   
+    delay(100); 
   }
 }
 
