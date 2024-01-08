@@ -8,7 +8,7 @@ const char* password = "vfpk0135";
 const int trigPin = 3;
 const int echoPin = 2;
 
-const char* mqtt_broker = "192.168.249.213";
+const char* mqtt_broker = "192.168.33.213";
 const int mqtt_port = 1883;
 const char* mqtt_topic = "sensor2/distance";
 

@@ -10,7 +10,7 @@ const char* ssid = "privatered";
 const char* password = "vfpk0135";
 
 // MQTT Broker settings
-const char* mqtt_broker = "192.168.249.213";
+const char* mqtt_broker = "192.168.33.213";
 const int mqtt_port = 1883;
 const char* mqtt_topic1 = "sensor1/distance"; 
 const char* mqtt_topic2 = "sensor2/distance"; 
@@ -121,15 +121,20 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 }
 
 void checkForPresenceAndDirection(float d1, float d2) {
-    const float range = 50.0; 
+    const float range = 50.0; // Rango de detección
+    const float tolerance = 5.0; // Margen de error para considerar un objeto en el centro
+    const float noiseThreshold = 2.0; // Umbral para ignorar cambios menores y reducir ruido
+    static float lastProximity = 0; // Guarda la última proximidad para suavizado
     float proximity;
-    bool isLeft = false, isRight = false;
+    bool isLeft = false, isRight = false, isCenter = false;
 
     if (d1 <= range || d2 <= range) {
         if (d1 <= range && d2 <= range) {
-            proximity = min(d1, d2);
-            isLeft = d1 < d2;
-            isRight = d2 < d1;
+            proximity = (d1 + d2) / 2; // Promedio para una estimación más suave
+            // Comprobación de centro con tolerancia
+            isCenter = abs(d1 - d2) <= tolerance;
+            isLeft = !isCenter && d1 < d2;
+            isRight = !isCenter && d2 < d1;
         } else if (d1 <= range) {
             proximity = d1;
             isLeft = true;
@@ -137,12 +142,17 @@ void checkForPresenceAndDirection(float d1, float d2) {
             proximity = d2;
             isRight = true;
         }
-
+        // Filtrado de ruido: ignorar cambios menores
+        if (abs(proximity - lastProximity) > noiseThreshold) {
+            lastProximity = proximity;
+        } else {
+            proximity = lastProximity;
+        }
         int ledsToTurnOn = map(proximity, 0, range, numLeds, 0);
         ledsToTurnOn = constrain(ledsToTurnOn, 0, numLeds);
         turnOnLeds(ledsToTurnOn);
 
-        String direction = isLeft ? "Left" : (isRight ? "Right" : "Center");
+        String direction = isCenter ? "Center" : (isLeft ? "Left" : "Right");
         String line1 = "Prox: " + String(proximity, 2) + "cm";
         String line2 = "Dir: " + direction + " - LEDs: " + String(ledsToTurnOn);
         lcdPrint(line1, 1);
@@ -151,9 +161,9 @@ void checkForPresenceAndDirection(float d1, float d2) {
         lcdPrint("No Movement", 1);
         lcdPrint("", 2);
         turnOffLeds();
+        lastProximity = 0; // Resetea la proximidad cuando no hay movimiento
     }
 }
-
 
 
 void reconnectMQTT() {
