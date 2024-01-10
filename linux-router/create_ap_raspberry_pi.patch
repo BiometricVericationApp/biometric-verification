@@ -1,0 +1,10 @@
+--- create_ap_real	2024-01-09 18:07:05.693109771 +0100
++++ create_ap	2024-01-09 18:06:50.515804687 +0100
+@@ -1765,6 +1765,7 @@
+ dhcp-range=${GATEWAY%.*}.1,${GATEWAY%.*}.254,255.255.255.0,24h
+ dhcp-option-force=option:router,${GATEWAY}
+ dhcp-option-force=option:dns-server,${DHCP_DNS}
++dhcp-host=e4:5f:01:f2:b4:df,192.168.33.213
+ EOF
+     MTU=$(get_mtu $INTERNET_IFACE)
+     [[ -n "$MTU" ]] && echo "dhcp-option-force=option:mtu,${MTU}" >> $CONFDIR/dnsmasq.conf
