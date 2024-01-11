@@ -66,7 +66,7 @@ void WiFiTask(void *pvParameters) {
   for (;;) {
     if (WiFi.status() != WL_CONNECTED) {
      // lcdPrint("Connecting to WiFi",1);
-      WiFi.begin(SSID_WIFI, SSID_SSID_PASSWORD);
+      WiFi.begin(SSID_WIFI, SSID_PASSWORD);
       while (WiFi.status() != WL_CONNECTED) {
         vTaskDelay(500 / portTICK_PERIOD_MS);
       }

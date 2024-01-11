@@ -1,27 +1,20 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include "common.h"
+#include "common_ultrasound.h"
+#include "mqtt.h"
 
-
-const char* ssid = "privatered";
-const char* password = "vfpk0135";
-
-const int trigPin = 3;
-const int echoPin = 2;
-
-const char* mqtt_broker = "192.168.33.213";
-const int mqtt_port = 1883;
-const char* mqtt_topic = "sensor2/distance";
 
 WiFiClient espClientSensor2;
 PubSubClient mqttClient(espClientSensor2);
 
 void setup() {
   Serial.begin(19200);
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
 
   connectToWiFi();
-  mqttClient.setServer(mqtt_broker, mqtt_port);
+  mqttClient.setServer(IP_MQTT_BROKER, PORT_MQTT_BROKER);
 }
 
 void loop() {
@@ -36,7 +29,7 @@ void loop() {
   Serial.println(" cm");
 
   if (mqttClient.connected()) {
-    mqttClient.publish(mqtt_topic, String(distance).c_str());
+    mqttClient.publish(TOPIC_DISTANCE_SENSOR_2, String(distance).c_str());
   }
 
   delay(5000);  
@@ -44,7 +37,7 @@ void loop() {
 
 void connectToWiFi() {
   Serial.print("Connecting to WiFi");
-  WiFi.begin(ssid, password);
+  WiFi.begin(SSID_WIFI, SSID_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
@@ -67,13 +60,13 @@ void reconnectMQTT() {
 }
 
 float measureDistance() {
-  digitalWrite(trigPin, LOW);
+  digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
+  digitalWrite(TRIG_PIN, HIGH);
   delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
+  digitalWrite(TRIG_PIN, LOW);
 
-  float time = pulseIn(echoPin, HIGH);
+  float time = pulseIn(ECHO_PIN, HIGH);
   float distance = time * 0.0343 / 2;
   return distance;
 }
