@@ -1,6 +1,6 @@
 // Wifi
-#define SSID "privatered"
-#define PASSWORD "vfpk0135"
+#define SSID_WIFI "privatered"
+#define SSID_PASSWORD "vfpk0135"
 
 // MQTT
 #define IP_MQTT_BROKER "192.168.33.213"
