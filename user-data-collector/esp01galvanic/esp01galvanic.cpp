@@ -1,8 +1,13 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include "common.h"
+#include <Arduino.h>
+
 
 const char* mqtt_topic = "sensor3/data";
+
+void setup_wifi();
+void reconnect();
 
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
@@ -27,12 +32,13 @@ void loop() {
   }
   mqttClient.loop();
 
-  if (Serial.available() > 0) {
-    String data = Serial.readStringUntil('\n');
-    mqttClient.publish(mqtt_topic, data.c_str());
+  if (Serial.available()) {
+    String payload = Serial.readStringUntil('\n');
+    if(payload.length() > 0){
+      mqttClient.publish(mqtt_topic, payload.c_str());
+    }
   }
 }
-
 void reconnect() {
   while (!mqttClient.connected()) {
     if (mqttClient.connect("ESP01Client")) {

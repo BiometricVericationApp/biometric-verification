@@ -55,13 +55,17 @@ void loop() {
   }
 
   // Comprobar si es tiempo de imprimir
-  if (millis() - lastPrintTime > printInterval) {
-    // Imprimir solo SensorValue y BPM
-    Serial.print("SensorValue=");
-    Serial.print(sensorValue);
-    Serial.print(", BPM=");
-    Serial.println(beatsPerMinute);
+// En el loop del Arduino
+if (millis() - lastPrintTime > printInterval) {
+  String jsonPayload = "{\"SensorValue\":";
+  jsonPayload += sensorValue;
+  jsonPayload += ", \"BPM\":";
+  jsonPayload += beatsPerMinute;
+  jsonPayload += "}";
 
-    lastPrintTime = millis(); // Actualizar la última vez que se imprimió la información
-  }
+  Serial.println(jsonPayload);
+
+  lastPrintTime = millis();
+}
+
 }

@@ -9,6 +9,12 @@
 
 const int ledPins[] = {12, 14, 27, 26, 33, 32, 36, 34, 16, 17}; 
 const int numLeds = 10;
+float bpm = 0.0;
+float gsr = 0.0;
+unsigned long lastSwitchTime = 0;
+const long switchInterval = 5000; 
+bool displaySensor3Data = false;
+
 
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
@@ -91,8 +97,22 @@ void MQTTTask(void *pvParameters) {
 
 void LCDDisplayTask(void *pvParameters) {
   for (;;) {
-    if (distance1 > 0 && distance2 > 0) {
-      checkForPresenceAndDirection(distance1, distance2);
+    if (millis() - lastSwitchTime > switchInterval) {
+      displaySensor3Data = !displaySensor3Data;
+      lastSwitchTime = millis();
+    }
+
+    if (displaySensor3Data) {
+      lcdPrint("BPM: " + String(bpm),1);
+      lcdPrint("GSR: " + String(gsr), 2); 
+    } else {
+      if (distance1 > 0 && distance2 > 0) {
+        checkForPresenceAndDirection(distance1, distance2);
+      } else {  
+        lcdPrint("", 1); 
+        lcdPrint("No Movement", 1);
+        lcdPrint("", 2); 
+      }
     }
     vTaskDelay(2000 / portTICK_PERIOD_MS);
   }
@@ -103,13 +123,24 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   for (unsigned int i = 0; i < length; i++) {
     message += (char)payload[i];
   }
+  Serial.print("Received message: ");
+  Serial.println(message);
 
   if (String(topic) == TOPIC_DISTANCE_SENSOR_1) {
     distance1 = message.toFloat();
   } else if (String(topic) == TOPIC_DISTANCE_SENSOR_2) {
     distance2 = message.toFloat();
+  } else if (String(topic) == "sensor3/data") {
+    if (message.startsWith("Sensor Gsr: ")) {
+      gsr = message.substring(12).toFloat();
+    } else if (message.startsWith("Bpm: ")) {
+      bpm = message.substring(5).toFloat();
+    }
   }
 }
+
+
+
 
 void checkForPresenceAndDirection(float d1, float d2) {
     const float range = 50.0; // Rango de detección
@@ -152,7 +183,7 @@ void checkForPresenceAndDirection(float d1, float d2) {
         lcdPrint("No Movement", 1);
         lcdPrint("", 2);
         turnOffLeds();
-        lastProximity = 0; // Resetea la proximidad cuando no hay movimiento
+        lastProximity = 0;
     }
 }
 
@@ -164,6 +195,7 @@ void reconnectMQTT() {
       Serial.println("connected");
       mqttClient.subscribe(TOPIC_DISTANCE_SENSOR_1);
       mqttClient.subscribe(TOPIC_DISTANCE_SENSOR_2);
+      mqttClient.subscribe(TOPIC_SENSOR_3_DATA);
     } else {
       Serial.print("failed, rc=");
       Serial.print(mqttClient.state());
@@ -185,6 +217,8 @@ void lcdPrint(String message, int line) {
     delay(100); 
   }
 }
+
+
 
 
 
