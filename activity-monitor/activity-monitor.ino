@@ -6,15 +6,8 @@
 #include <freertos/semphr.h>
 #include "common.h"
 #include "common_ultrasound.h"
-
-const int ledPins[] = {12, 14, 27, 26, 33, 32, 36, 34, 16, 17}; 
-const int numLeds = 10;
-float bpm = 0.0;
-float gsr = 0.0;
-unsigned long lastSwitchTime = 0;
-const long switchInterval = 5000; 
-bool displaySensor3Data = false;
-
+#include "leds.h"
+#include "presence.h"
 
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
@@ -22,56 +15,55 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 SemaphoreHandle_t xSemaphoreLCD;
 
-distance_sensor distance1 = 0.0;
-distance_sensor distance2 = 0.0;
-const float detectionRange = 100.0;
+enum LastAction {
+    Heart,
+    Distance,
+    None,
+};
+
+struct HeartInfo {
+    float gsr;
+    float bpm;
+};
+
+struct GlobalInfo {
+    HeartInfo heart;
+    DistanceInfo distance;
+    LastAction lastAction;
+};
+
+GlobalInfo info = { .lastAction = None };
+SemaphoreHandle_t xSemaphoreInfo;
 
 void WiFiTask(void *pvParameters);
 void MQTTTask(void *pvParameters);
-void LCDDisplayTask(void *pvParameters);
-void mqttCallback(char* topic, byte* payload, unsigned int length);
-void checkForPresenceAndDirection(float d1, float d2, float range);
 void reconnectMQTT();
+void mqttCallback(char* topic, byte* payload, unsigned int length);
 void lcdPrint(String message, int line);
+void LCDDisplayTask(void *pvParameters);
 
 void setup() {
   Serial.begin(115200);
   lcd.init();
   lcd.backlight();
-
   xSemaphoreLCD = xSemaphoreCreateMutex(); 
-
+  xSemaphoreInfo = xSemaphoreCreateMutex(); 
   xTaskCreate(WiFiTask, "WiFi Task", 10000, NULL, 1, NULL);
   xTaskCreate(MQTTTask, "MQTT Task", 10000, NULL, 1, NULL);
   xTaskCreate(LCDDisplayTask, "LCD Display Task", 10000, NULL, 1, NULL);
-  for(int i = 0; i < numLeds; i++) {
-    pinMode(ledPins[i], OUTPUT);
-  }
+  setUpLeds();
 }
 
-void turnOnLeds(int numLedsToTurnOn) {
-  for(int i = 0; i < numLeds; i++) {
-    if (i < numLedsToTurnOn) {
-      digitalWrite(ledPins[i], HIGH);
-    } else {
-      digitalWrite(ledPins[i], LOW);
-    }
-  }
-}
 
-void turnOffLeds() {
-  for(int i = 0; i < numLeds; i++) {
-    digitalWrite(ledPins[i], LOW);
-  }
-}
+void loop() {}
 
-void loop() {
-}
+/*
+    MQTT and wifi related
+*/
 
 void WiFiTask(void *pvParameters) {
   for (;;) {
     if (WiFi.status() != WL_CONNECTED) {
-     // lcdPrint("Connecting to WiFi",1);
       WiFi.begin(SSID_WIFI, SSID_PASSWORD);
       while (WiFi.status() != WL_CONNECTED) {
         vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -81,6 +73,7 @@ void WiFiTask(void *pvParameters) {
     vTaskDelay(10000 / portTICK_PERIOD_MS);
   }
 }
+
 
 void MQTTTask(void *pvParameters) {
   mqttClient.setServer(IP_MQTT_BROKER, PORT_MQTT_BROKER);
@@ -93,98 +86,6 @@ void MQTTTask(void *pvParameters) {
     mqttClient.loop();
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
-}
-
-void LCDDisplayTask(void *pvParameters) {
-  for (;;) {
-    if (millis() - lastSwitchTime > switchInterval) {
-      displaySensor3Data = !displaySensor3Data;
-      lastSwitchTime = millis();
-    }
-
-    if (displaySensor3Data) {
-      lcdPrint("BPM: " + String(bpm),1);
-      lcdPrint("GSR: " + String(gsr), 2); 
-    } else {
-      if (distance1 > 0 && distance2 > 0) {
-        checkForPresenceAndDirection(distance1, distance2);
-      } else {  
-        lcdPrint("", 1); 
-        lcdPrint("No Movement", 1);
-        lcdPrint("", 2); 
-      }
-    }
-    vTaskDelay(2000 / portTICK_PERIOD_MS);
-  }
-}
-
-void mqttCallback(char* topic, byte* payload, unsigned int length) {
-  String message;
-  for (unsigned int i = 0; i < length; i++) {
-    message += (char)payload[i];
-  }
-  Serial.print("Received message: ");
-  Serial.println(message);
-
-  if (String(topic) == TOPIC_DISTANCE_SENSOR_1) {
-    distance1 = message.toFloat();
-  } else if (String(topic) == TOPIC_DISTANCE_SENSOR_2) {
-    distance2 = message.toFloat();
-  } else if (String(topic) == "sensor3/data") {
-    if (message.startsWith("Sensor Gsr: ")) {
-      gsr = message.substring(12).toFloat();
-    } else if (message.startsWith("Bpm: ")) {
-      bpm = message.substring(5).toFloat();
-    }
-  }
-}
-
-
-
-
-void checkForPresenceAndDirection(float d1, float d2) {
-    const float range = 50.0; // Rango de detección
-    const float tolerance = 5.0; // Margen de error para considerar un objeto en el centro
-    const float noiseThreshold = 2.0; // Umbral para ignorar cambios menores y reducir ruido
-    static float lastProximity = 0; // Guarda la última proximidad para suavizado
-    float proximity;
-    bool isLeft = false, isRight = false, isCenter = false;
-
-    if (d1 <= range || d2 <= range) {
-        if (d1 <= range && d2 <= range) {
-            proximity = (d1 + d2) / 2; // Promedio para una estimación más suave
-            // Comprobación de centro con tolerancia
-            isCenter = abs(d1 - d2) <= tolerance;
-            isLeft = !isCenter && d1 < d2;
-            isRight = !isCenter && d2 < d1;
-        } else if (d1 <= range) {
-            proximity = d1;
-            isLeft = true;
-        } else {
-            proximity = d2;
-            isRight = true;
-        }
-        // Filtrado de ruido: ignorar cambios menores
-        if (abs(proximity - lastProximity) > noiseThreshold) {
-            lastProximity = proximity;
-        } else {
-            proximity = lastProximity;
-        }
-        int ledsToTurnOn = map(proximity, 0, range, numLeds, 0);
-        ledsToTurnOn = constrain(ledsToTurnOn, 0, numLeds);
-        turnOnLeds(ledsToTurnOn);
-
-        String direction = isCenter ? "Center" : (isLeft ? "Left" : "Right");
-        String line1 = "Prox: " + String(proximity, 2) + "cm";
-        String line2 = "Dir: " + direction + " - LEDs: " + String(ledsToTurnOn);
-        lcdPrint(line1, 1);
-        lcdPrint(line2, 2);
-    } else {
-        lcdPrint("No Movement", 1);
-        lcdPrint("", 2);
-        turnOffLeds();
-        lastProximity = 0;
-    }
 }
 
 
@@ -205,6 +106,59 @@ void reconnectMQTT() {
   }
 }
 
+
+void mqttCallback(char* topic, byte* payload, unsigned int length) {
+  String message;
+  for (unsigned int i = 0; i < length; i++) {
+    message += (char)payload[i];
+  }
+
+  if (xSemaphoreTake(xSemaphoreInfo, portMAX_DELAY)) {
+    if (String(topic) == TOPIC_DISTANCE_SENSOR_1) {
+      info.distance.distance.leftDistance = message.toFloat();
+      info.lastAction = Distance;
+    } else if (String(topic) == TOPIC_DISTANCE_SENSOR_2) {
+      info.distance.distance.rightDistance = message.toFloat();
+      info.lastAction = Distance;
+    } else if (String(topic) == TOPIC_SENSOR_3_DATA) {
+      if (message.startsWith("Sensor Gsr: ")) {
+        info.heart.gsr = message.substring(12).toFloat();
+      } else if (message.startsWith("Bpm: ")) {
+        info.heart.bpm = message.substring(5).toFloat();
+      }
+      info.lastAction = Heart;
+    }
+    xSemaphoreGive(xSemaphoreInfo);
+  }
+}
+
+/*
+    LCD Display 
+*/
+
+void LCDDisplayTask(void *pvParameters) {
+  for (;;) {
+    if (xSemaphoreTake(xSemaphoreInfo, portMAX_DELAY)) {
+        if (info.lastAction == Heart) {
+          lcdPrint("BPM: " + String(info.heart.bpm),1);
+          lcdPrint("GSR: " + String(info.heart.gsr), 2); 
+          info.lastAction = Distance;
+        } else if (info.lastAction == Distance) {
+          DistanceResult result = checkForPresenceAndDirection(info.distance);
+          info.distance.lastResult = result;
+          if (result.hasData) {
+            lcdPrint(result.direction, 1);
+          }
+        } else {
+          lcdPrint("Nothing Received...", 1);
+        }
+        xSemaphoreGive(xSemaphoreInfo);
+    }
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
+  }
+}
+
+
 void lcdPrint(String message, int line) {
   if (xSemaphoreTake(xSemaphoreLCD, portMAX_DELAY)) {
     lcd.setCursor(0, line - 1);
@@ -213,12 +167,7 @@ void lcdPrint(String message, int line) {
       lcd.print(" ");
     }
     xSemaphoreGive(xSemaphoreLCD);
-   
     delay(100); 
   }
 }
-
-
-
-
 
