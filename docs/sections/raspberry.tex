@@ -21,29 +21,44 @@ The development of the RaspberryPi system involved the following milestones:
 \subsubsection{Achieved milestones, execution order, priority, and dependencies}
 \begin{enumerate}
     \item \textbf{Milestone 1: Setting up an MQTT broker}
-       - \textit{Priority:} High. Fundamental for all the data transmission.
-       - \textit{Dependencies:} Basic WiFi setup.
-       - \textit{Execution Order:} First, as it is crucial for data reception.
+        \begin{enumerate}
+            \item \textit{Priority:} High. Fundamental for all the data transmission.
+            \item \textit{Dependencies:} Basic WiFi setup.
+            \item \textit{Execution Order:} First, as it is crucial for data reception.
+            \item \textit{Assigned to:} Pablo
+        \end{enumerate}
 
     \item \textbf{Milestone 2: Establishing MQTT communication to receive and send data}
-       - \textit{Priority:} Medium. Important for working with real data.
-       - \textit{Dependencies:} Successful MQTT setup.
-       - \textit{Execution Order:} Second, building upon established communication.
+        \begin{enumerate}
+            \item \textit{Priority:} Medium. Important for working with real data.
+            \item \textit{Dependencies:} Successful MQTT setup.
+            \item \textit{Execution Order:} Second, building upon established communication.
+            \item \textit{Assigned to:} Pablo
+        \end{enumerate}
 
     \item \textbf{Milestone 3: Training neural network}
-       - \textit{Priority:} High. Essential for effective prediction.
-       - \textit{Dependencies:} Functional hardware setup (webcam).
-       - \textit{Execution Order:} Third, getting a first prediction.
+        \begin{enumerate}
+            \item \textit{Priority:} High. Essential for effective prediction.
+            \item \textit{Dependencies:} Functional hardware setup (webcam).
+            \item \textit{Execution Order:} Third, getting a first prediction.
+            \item \textit{Assigned to:} Ferran
+        \end{enumerate}
 
     \item \textbf{Milestone 4: Training a classification tree}
-       - \textit{Priority:} Medium. Important for a more accurate prediction.
-       - \textit{Dependencies:} Functioning MQTT communication and neural network.
-       - \textit{Execution Order:} Fourth, finalizing the machine learning prediction.
+        \begin{enumerate}
+            \item \textit{Priority:} Medium. Important for a more accurate prediction.
+            \item \textit{Dependencies:} Functioning MQTT communication and neural network.
+            \item \textit{Execution Order:} Fourth, finalizing the machine learning prediction.
+            \item \textit{Assigned to:} Ferran
+        \end{enumerate}
 
     \item \textbf{Milestone 5: Sending the results}
-       - \textit{Priority:} High. Essential for system effectiveness.
-       - \textit{Dependencies:} Functioning MQTT communication and classification tree.
-       - \textit{Execution Order:} Fourth, last step towards getting a prediction shown to the user.
+        \begin{enumerate}
+            \item \textit{Priority:} High. Essential for system effectiveness.
+            \item \textit{Dependencies:} Functioning MQTT communication and classification tree.
+            \item \textit{Execution Order:} Fourth, last step towards getting a prediction shown to the user.
+            \item \textit{Assigned to:} Oriol
+        \end{enumerate}
 \end{enumerate}
 
 \subsubsection{Hardware setup}
