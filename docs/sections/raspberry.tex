@@ -50,7 +50,7 @@ The development of the RaspberryPi system involved the following milestones:
        - \textit{Priority:} High. Essential for system effectiveness.
        - \textit{Dependencies:} Functioning MQTT communication and classification tree.
        - \textit{Execution Order:} Fourth, last step towards getting a prediction shown to the user.
-\end{enumerate}ƒ
+\end{enumerate}
 
 \subsection{Hardware setup}
 The hardware setup for the RaspberryPi comprises:
@@ -89,16 +89,17 @@ Approximately 30 hours were dedicated to developing the RaspberryPi system, usin
 \end{itemize}
 
 \subsection{Hardware and Software Integration}
-The only hardware used on this setup was connecting a usb webcam to the RaspberryPi.
+The only hardware used on this setup was a webcam connected through usb to the RaspberryPi.
 
-\subsection{MQTT Tree Structure}
-Below is the outline of the MQTT topics and their functions:
-
-\subsubsection{MQTT Topics}
+\subsection{MQTT Topics}
 \begin{itemize}
     \item \textbf{sensor3/heart:} This is the topic used to collect heart rate biometric data.
     \item \textbf{sensor3/galvanic:} Provides galvanic resistance data, and together with the first topic, this two provide the full biometric data needed.
     \item \textbf{rpi/prediction:} Topic used to publish the result of the prediction.
 \end{itemize}
+
+\subsection{Conclusion}
+The development on the RaspberryPi system was a very interesting experience, it was the first time working with machine learning for some of us and it was very challenging to get an accurate prediction, but after some research and testing it was possible to get a good result. The MQTT broker setup was very straight forward and it was easy to get it working.
+
 
 \end{document}
