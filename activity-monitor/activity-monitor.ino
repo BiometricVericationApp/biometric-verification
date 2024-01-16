@@ -9,32 +9,12 @@
 #include "leds.h"
 #include "presence.h"
 #include "lcd.h"
+#include "global-data.h"
 
-#define INCLUDE_vTaskSuspend  1
+#define THRESHOLD 4
 
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
-
-enum LastAction {
-    Heart,
-    Distance,
-    None,
-};
-
-struct HeartInfo {
-    float gsr;
-    float bpm;
-};
-
-struct GlobalInfo {
-    HeartInfo heart;
-    DistanceInfo distance;
-    LastAction lastAction;
-};
-
-GlobalInfo info = { .lastAction = None };
-SemaphoreHandle_t xSemaphoreInfo;
-
 void WiFiTask(void *pvParameters);
 void MQTTTask(void *pvParameters);
 void reconnectMQTT();
@@ -46,10 +26,11 @@ void setup() {
   Serial.begin(115200);
   setUpLcd();
   setUpLeds();
-  xSemaphoreInfo = xSemaphoreCreateMutex(); 
+  setUpGlobalData();
   xTaskCreate(WiFiTask, "WiFi Task", 10000, NULL, 1, NULL);
   xTaskCreate(MQTTTask, "MQTT Task", 10000, NULL, 1, NULL);
   xTaskCreate(updateDevicesTask, "Update Devices Task", 10000, NULL, 1, NULL);
+  xTaskCreate(markAsNonUpdated, "Mark as None", 10000, NULL, 1, NULL);
 }
 
 
@@ -110,54 +91,52 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   for (unsigned int i = 0; i < length; i++) {
     message += (char)payload[i];
   }
+  executeActionFromTopic(topic, message);
+}
 
-  if (xSemaphoreTake(xSemaphoreInfo, portMAX_DELAY)) {
-    if (String(topic) == TOPIC_DISTANCE_SENSOR_1) {
-      info.distance.current.leftDistance = message.toFloat();
-      info.lastAction = Distance;
-    } else if (String(topic) == TOPIC_DISTANCE_SENSOR_2) {
-      info.distance.current.rightDistance = message.toFloat();
-      info.lastAction = Distance;
-    } else if (String(topic) == TOPIC_SENSOR_3_DATA) {
-      if (message.startsWith("Sensor Gsr: ")) {
-        info.heart.gsr = message.substring(12).toFloat();
-      } else if (message.startsWith("Bpm: ")) {
-        info.heart.bpm = message.substring(5).toFloat();
-      }
-      info.lastAction = Heart;
+void executeActionFromTopic(char *topic, String message) {
+  if (String(topic) == TOPIC_DISTANCE_SENSOR_1) {
+    float leftDist = message.toFloat();
+    updateLeftDistance(leftDist);
+  } else if (String(topic) == TOPIC_DISTANCE_SENSOR_2) {
+    float rightDist = message.toFloat();
+    updateRightDistance(rightDist);
+  } else if (String(topic) == TOPIC_SENSOR_3_DATA) {
+    if (message.startsWith("Sensor Gsr: ")) {
+      float gsr = message.substring(12).toFloat();
+      updateGsr(gsr);
+    } else if (message.startsWith("Bpm: ")) {
+      float bpm = message.substring(5).toFloat();
+      updateBpm(bpm);
     }
-    xSemaphoreGive(xSemaphoreInfo);
   }
 }
 
-/*
-    LCD Display 
-*/
 
 void updateDevicesTask(void *pvParameters) {
   for (;;) {
-    if (xSemaphoreTake(xSemaphoreInfo, portMAX_DELAY)) {
-        if (info.lastAction == Heart) {
-            executeActionHeart();
-        } else if (info.lastAction == Distance) {
-            executeActionDistance();
-        } else {
-          lcdPrint("Nothing Received...");
-        }
-        xSemaphoreGive(xSemaphoreInfo);
+    LastAction action = getLastAction();
+    if (action == Heart) {
+        executeActionHeart();
+    } else if (action == Distance) {
+        executeActionDistance();
+    } else {
+        lcdPrint("Nothing Received...");
+        turnOffLeds();
     }
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
 
 void executeActionHeart() {
-    lcdPrint("BPM: " + String(info.heart.bpm), Up);
-    lcdPrint("GSR: " + String(info.heart.gsr), Down); 
+    lcdPrint("BPM: " + String(getBpm()), Up);
+    lcdPrint("GSR: " + String(getGsr()), Down); 
 }
 
 void executeActionDistance() {
-    DistanceResult result = checkForPresenceAndDirection(info.distance);
-    info.distance.last = result;
+    struct DistanceInfo dist = getDistance();
+    DistanceResult result = checkForPresenceAndDirection(dist);
+    updateLastDistance(result);
     if (result.hasData) {
         lcdPrint(result.direction, Up);
         lcdPrint("CM: " + String(result.proximity), Down);
@@ -170,3 +149,13 @@ void printDistanceInLeds(float proximity) {
     turnOnLeds(ledsToTurnOn);
 }
 
+void markAsNonUpdated(void *pvParameters) {
+  for (;;) {
+    int counter = getNumberOfNoPackages();
+    if (counter >= THRESHOLD) {
+        updateAction(None);
+    }
+    updateNumberOfNoPackages();
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+  }
+}

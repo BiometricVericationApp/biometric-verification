@@ -3,6 +3,9 @@
  * TOLERANCE => Error marge for considering an object in center
  * NOISE_THRESHOLD => Ignore changes that changed below this threshold
 */
+#ifndef PRESENCE_H_   /* Include guard */
+#define PRESENCE_H_
+
 #include <Arduino.h>
 
 #define DETECTION_RANGE 50.0
@@ -53,12 +56,11 @@ DistanceResult checkForPresenceAndDirection(DistanceInfo info) {
             isRight = true;
         }
 
-        if (abs(proximity - info.last.proximity) <= NOISE_THRESHOLD) {
-            proximity = info.last.proximity;
-        }
-
         String direction = isCenter ? CENTER_STR : (isLeft ? LEFT_STR : RIGHT_STR);
         return {.hasData = true, .direction = direction, .proximity = proximity};
     }
     return {.hasData = false};
 }
+
+#endif // PRESENCE_H_
+
