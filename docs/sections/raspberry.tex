@@ -1,0 +1,104 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+\begin{document}
+
+\section{RaspberryPi}
+
+\subsection{Objective and Functionality}
+The RaspberryPi is the backbone of the project, it serves as the MQTT broker and merges the collected data from both the Biometric Sensors and the camera it has attached to provide a prediction of who may the user interacting with system be, sending that final prediction to the Monitor System. Its responsibilites include:
+\begin{itemize}
+    \item Subscribing to and processing biometric data from the ESP-01 module attached to biometric sensors via MQTT.
+    \item Processing data from the webcam connected to the RaspberryPi via usb and running it through a neural network to get a prediction of who is the user in the picture.
+    \item Run the biometric data obtained through MQTT and the result of the neural network through a decision tree to get a final prediction of who is the user interacting with the system.
+    \item Sending the final result to the 'rpi/prediction' topic so the System Monitor can show the result.
+\end{itemize}
+
+\subsection{Project Definition and Milestones}
+The development of the RaspberryPi system involved the following milestones:
+\begin{enumerate}
+    \item Setting up an MQTT broker to handle all the IoT devices communications.
+    \item Establishing MQTT communication to receive biometric data and send predictions.
+    \item Training a neural network to work with the webcam input and predict which user is in front of it.
+    \item Training a classification tree to get a final prediction using both biometric data and neural network prediction.
+\end{enumerate}
+
+\subsection{Achieved milestones, execution order, priority, and dependencies}
+\begin{enumerate}
+    \item \textbf{Milestone 1: Setting up an MQTT broker}
+       - \textit{Priority:} High. Fundamental for all the data transmission.
+       - \textit{Dependencies:} Basic WiFi setup.
+       - \textit{Execution Order:} First, as it is crucial for data reception.
+
+    \item \textbf{Milestone 2: Establishing MQTT communication to receive and send data}
+       - \textit{Priority:} Medium. Important for working with real data.
+       - \textit{Dependencies:} Successful MQTT setup.
+       - \textit{Execution Order:} Second, building upon established communication.
+
+    \item \textbf{Milestone 3: Training neural network}
+       - \textit{Priority:} High. Essential for effective prediction.
+       - \textit{Dependencies:} Functional hardware setup (webcam).
+       - \textit{Execution Order:} Third, getting a first prediction.
+
+    \item \textbf{Milestone 4: Training a classification tree}
+       - \textit{Priority:} Medium. Important for a more accurate prediction.
+       - \textit{Dependencies:} Functioning MQTT communication and neural network.
+       - \textit{Execution Order:} Fourth, finalizing the machine learning prediction.
+
+    \item \textbf{Milestone 5: Sending the results}
+       - \textit{Priority:} High. Essential for system effectiveness.
+       - \textit{Dependencies:} Functioning MQTT communication and classification tree.
+       - \textit{Execution Order:} Fourth, last step towards getting a prediction shown to the user.
+\end{enumerate}ƒ
+
+\subsection{Hardware setup}
+The hardware setup for the RaspberryPi comprises:
+\begin{itemize}
+    \item A RaspberryPi 4 with WiFi capabilites.
+    \item A logitech webcam with usb connection.
+\end{itemize}
+
+\subsection{Software Implementation}
+The software, written in python has the key functions:
+\begin{itemize}
+    \item Recieving biometric data from 'sensor3/galvanic' and 'sensor3/heart' topics.
+    \item Triggering a neural network prediction through the webcam obtained footage.
+    \item Run the result from the neural network and the biometric data through a classification tree.
+    \item Publish the final prediction to the 'rpi/prediction' topic.
+\end{itemize}
+The operating system (RaspberriPi OS Lite) is responsible of connecting to WiFi and running MQTT broker. So basically it has to:
+\begin{itemize}
+    \item Run a service for MQTT broker that launches on startup.
+    \item Establish WiFi connection.
+    \item Run a service that initializes the prediction pipeline when a user is detected.
+\end{itemize}
+
+\textbf{\textit{NOTE}}: The data collection for training the classification tree has also been done on the RaspberryPi as well as the training itself, code for replicating this steps can be found on the project repository.
+
+\subsection{Testing}
+Testing has been mainly focused on the machine learning aspect, since getting accurate results was non trivial. By generating artificial data (data augmentation) it was possible to finally achieve a more convincing accuracy. Regarding MQTT, setting up the broker was a very straight forward process with no trouble.
+
+\subsection{Dedication Time}
+Approximately 30 hours were dedicated to developing the RaspberryPi system, using most of the time on the machine learning aspect.
+
+\subsection{Challenges and Solutions}
+\begin{itemize}
+    \item \textbf{Hardware Challenges:} Collecting footage from the usb webcam.
+    \item \textbf{Software Challenges:} Getting an accurate prediction from the model. Using a foundational model trained for object detection wasn't working very well for telling faces apart so the solution provided is to use a representative item for each member of the group which is what is placed in front of the camera, this way the neural network can tell us apart easily.
+\end{itemize}
+
+\subsection{Hardware and Software Integration}
+The only hardware used on this setup was connecting a usb webcam to the RaspberryPi.
+
+\subsection{MQTT Tree Structure}
+Below is the outline of the MQTT topics and their functions:
+
+\subsubsection{MQTT Topics}
+\begin{itemize}
+    \item \textbf{sensor3/heart:} This is the topic used to collect heart rate biometric data.
+    \item \textbf{sensor3/galvanic:} Provides galvanic resistance data, and together with the first topic, this two provide the full biometric data needed.
+    \item \textbf{rpi/prediction:} Topic used to publish the result of the prediction.
+\end{itemize}
+
+\end{document}
