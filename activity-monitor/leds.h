@@ -14,6 +14,7 @@ void setUpLeds() {
 }
 
 void turnOnLeds(int numLedsToTurnOn) {
+  numLedsToTurnOn = constrain(numLedsToTurnOn, 0, NUM_LEDS);
   for(int i = 0; i < NUM_LEDS; i++) {
     if (i < numLedsToTurnOn) {
       digitalWrite(LED_PINS[i], HIGH);

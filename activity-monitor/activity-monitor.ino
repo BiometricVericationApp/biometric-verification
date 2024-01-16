@@ -10,6 +10,8 @@
 #include "presence.h"
 #include "lcd.h"
 
+#define INCLUDE_vTaskSuspend  1
+
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
 
@@ -38,7 +40,7 @@ void MQTTTask(void *pvParameters);
 void reconnectMQTT();
 void mqttCallback(char* topic, byte* payload, unsigned int length);
 void lcdPrint(String message, int line);
-void LCDDisplayTask(void *pvParameters);
+void updateDevicesTask(void *pvParameters);
 
 void setup() {
   Serial.begin(115200);
@@ -47,7 +49,7 @@ void setup() {
   xSemaphoreInfo = xSemaphoreCreateMutex(); 
   xTaskCreate(WiFiTask, "WiFi Task", 10000, NULL, 1, NULL);
   xTaskCreate(MQTTTask, "MQTT Task", 10000, NULL, 1, NULL);
-  xTaskCreate(LCDDisplayTask, "LCD Display Task", 10000, NULL, 1, NULL);
+  xTaskCreate(updateDevicesTask, "Update Devices Task", 10000, NULL, 1, NULL);
 }
 
 
@@ -132,25 +134,39 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
     LCD Display 
 */
 
-void LCDDisplayTask(void *pvParameters) {
+void updateDevicesTask(void *pvParameters) {
   for (;;) {
     if (xSemaphoreTake(xSemaphoreInfo, portMAX_DELAY)) {
         if (info.lastAction == Heart) {
-          lcdPrint("BPM: " + String(info.heart.bpm), Up);
-          lcdPrint("GSR: " + String(info.heart.gsr), Down); 
-          info.lastAction = Distance;
+            executeActionHeart();
         } else if (info.lastAction == Distance) {
-          DistanceResult result = checkForPresenceAndDirection(info.distance);
-          info.distance.last = result;
-          if (result.hasData) {
-            lcdPrint(result.direction, Up);
-            lcdPrint("CM: " + String(result.proximity), Down);
-          }
+            executeActionDistance();
         } else {
           lcdPrint("Nothing Received...");
         }
         xSemaphoreGive(xSemaphoreInfo);
     }
-    vTaskDelay(2000 / portTICK_PERIOD_MS);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
+
+void executeActionHeart() {
+    lcdPrint("BPM: " + String(info.heart.bpm), Up);
+    lcdPrint("GSR: " + String(info.heart.gsr), Down); 
+}
+
+void executeActionDistance() {
+    DistanceResult result = checkForPresenceAndDirection(info.distance);
+    info.distance.last = result;
+    if (result.hasData) {
+        lcdPrint(result.direction, Up);
+        lcdPrint("CM: " + String(result.proximity), Down);
+        printDistanceInLeds(result.proximity);
+    }
+}
+
+void printDistanceInLeds(float proximity) {
+    int ledsToTurnOn = map(proximity, 0, DETECTION_RANGE, NUM_LEDS, 0);
+    turnOnLeds(ledsToTurnOn);
+}
+
