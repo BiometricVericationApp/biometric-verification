@@ -1,0 +1,94 @@
+\documentclass{article} 
+\usepackage[utf8]{inputenc} 
+\usepackage{graphicx}
+\newcommand{\figautorefname}{figure}
+\newcommand{\secautorefname}{section}
+\newcommand{\subsecautorefname}{subsection}
+\newcommand{\subsubsecautorefname}{subsubsection}
+
+\title{Biometric Authentication System Documentation} \author{Authors}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction} The Biometric Authentication System is a prove of concept of an IoT
+solution designed to provide security authentication through biometric verification, including
+galvanic skin response, heart rate analysis, and facial recognition. This
+project's primary objective is to establish a user-friendly system
+for authenticating individuals in secure environments as well as experimenting and learning with IoT devices. The following
+documentation comprises detailed descriptions of system components,project milestones, a user story depicting the system's functionality, and
+technical insights into the component integration and operation.
+
+\section{General Project Milestones} The development of the Biometric
+Authentication System was achieved through the accomplishment of several key
+milestones. These milestones collectively ensured the project's progress was
+systematically tracked and adhered to the proposed timeline. Note that component specific milestones with more
+detailed information, priorities and dependencies can be found on \autoref{component-implementations}
+
+\begin{enumerate} 
+    \item \textbf{Project Initiation:} Defining scope, objectives,
+and resource allocation. 
+\item \textbf{Component Sourcing and Assembly:} Hardware setup of the development environment. 
+\item \textbf{System Design:} Architecting overall system interactions and data flow.
+\item \textbf{Component Integration:} Ensuring seamless operation between
+different system modules. 
+\item \textbf{Software Development:} Writing and
+testing code for individual components and overall system coordination. 
+\item \textbf{Project Wrap-Up:} Final evaluation, documentation,
+and project delivery. 
+\end{enumerate}
+
+\section{Component Implementations}\label{sec:component-implementations} This section outlines the individual
+components that comprise our system, detailing their objectives, functionalities,
+and integration with the broader system context.
+
+\input{raspberry.tex}
+\input{activity_monitor.tex}
+\input{user_data_collector.tex}
+\input{presence.tex}
+
+\section{User Story} As the user approaches the authentication system, he is
+immediately detected by the ultrasonic sensors, which guide him to stand in the
+optimal position for scanning. As he places his fingers on the biometric sensors,
+his heart rate and skin resistance data are quietly collected and sent to the
+Raspberry Pi. At the same moment, the user looks at the camera, and his facial
+features are analyzed. The Raspberry Pi processes this information using
+a neural network and merges the results of the facial prediction with the biometrics sensors
+data by running them into a decision tree which outputs a final prediction, which appears on the screen
+and will tell which of the authorized users matches with if any. Within seconds, if the system identifies the user, 
+his name is displayed on the monitors.
+
+\section{Final Project Conclusions} The development of the Biometric
+Authentication System has been a path characterized by learning, adaptability,
+and fighting with malfunctioning sensors. One of the main challenges was synchronizing data from various
+biometric sensors with the real-time processing on the Raspberry Pi.
+By applying concurrency principles we managed to overcome this challenges and end up with a significantly accurate system.
+
+Overall, the system has realized robust biometric authentication with an
+impressive accuracy rate. The modularity of the system design also allows for
+easy updates and scalability.
+
+For future work, we suggest exploring alternative biometric modalities such as
+iris recognition or palm-print scanning to further enhance system security.
+Additionally, implementing machine learning models with more extensive datasets
+can offer continued improvement in recognition accuracy and pave the way for
+personalized user experiences.
+
+\section{Technical Documentation} The technical backbone of the Biometric
+Authentication System is formed through the meticulous integration of various
+hardware and software components, each playing a pivotal role in ensuring
+accurate user identification and a seamless user experience.
+
+\subsection{User Data Collector}
+
+\subsection{RaspberryPi}
+
+\subsection{Presence and Location}
+
+\subsection{Linux Router}
+
+\subsection{Activity Monitor}
+
+\end{document}
