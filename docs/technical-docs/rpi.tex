@@ -1,0 +1,53 @@
+\subsection{Raspberry Pi 4
+Configuration}\label{raspberry-pi-4-configuration}
+
+We use the raspberry pi 4 as a: - MQTT Broker - EdgeImpulse node for
+running the IA for detecting objects.
+
+\subsubsection{Configure the raspberry
+pi}\label{configure-the-raspberry-pi}
+
+You can configure your raspberry pi liunx image with
+\href{https://github.com/raspberrypi/rpi-imager}{rpi imager}, which
+comes pretty handy since you can:
+
+\begin{itemize}
+\tightlist
+\item
+  Enable wifi with an SSID and password.
+\item
+  Enable ssh and give it a public key that is allowed to connect to the
+  rpi
+\item
+  Add a username and password
+\end{itemize}
+
+This saved us a lot of time, and we didn't have to use any ethernet
+cable or screen for configuring it.
+
+\subsubsection{Install mosquitto broker}\label{install-mosquitto-broker}
+
+Install mosquitto with:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# We\textquotesingle{}re using the raspbian image for the rpi}
+\ExtensionTok{$}\NormalTok{ sudo apt{-}get update }\KeywordTok{\&\&} \FunctionTok{sudo}\NormalTok{ apt{-}get upgrade}
+\ExtensionTok{$}\NormalTok{ sudo apt{-}get install mosquitto}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Run mosquitto broker}\label{run-mosquitto-broker}
+
+Once mosquitto is installed, copy our configuration file and run it
+with:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{$}\NormalTok{ mosquitto }\AttributeTok{{-}c}\NormalTok{ mosquitto.conf }\AttributeTok{{-}v}
+\end{Highlighting}
+\end{Shaded}
+
+It will serve the mqtt server on port 1883.
+
+\subsubsection{}\label{section}

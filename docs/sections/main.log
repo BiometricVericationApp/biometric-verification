@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Arch Linux) (preloaded format=xelatex 2023.6.7)  16 JAN 2024 16:48
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Arch Linux) (preloaded format=xelatex 2023.6.7)  16 JAN 2024 17:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -153,24 +153,720 @@ Overfull \hbox (6.06203pt too wide) in paragraph at lines 73--78
 ensive datasets
  []
 
-[13]
-Overfull \hbox (6.73003pt too wide) in paragraph at lines 79--83
-\TU/lmr/m/n/10 The technical backbone of the Biometric Authentication System is
- formed through
+[13] (../technical-docs/rpi.tex
+! Undefined control sequence.
+l.11 \href
+          {https://github.com/raspberrypi/rpi-imager}{rpi imager}, which
+? 
+
+Overfull \hbox (43.00002pt too wide) in paragraph at lines 10--13
+\TU/lmr/m/n/10 You can configure your raspberry pi liunx image with https://git
+hub.com/raspberrypi/rpi-
  []
 
-[14] (./main.aux)
+! Undefined control sequence.
+l.15 \tightlist
+               
+? 
+
+! LaTeX Error: Environment Shaded undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.32 \begin{Shaded}
+                   
+? 
+
+! LaTeX Error: Environment Highlighting undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.33 \begin{Highlighting}
+                         []
+? 
+! Undefined control sequence.
+l.34 \CommentTok
+                {\# We\textquotesingle{}re using the raspbian image for the ...
+
+? 
+! Undefined control sequence.
+l.35 \ExtensionTok
+                  {$}\NormalTok{ sudo apt{-}get update }\KeywordTok{\&\&} \F...
+
+? 
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 35.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 35.
+! Extra }, or forgotten $.
+<recently read> }
+                 
+l.35 \ExtensionTok{$}
+                     \NormalTok{ sudo apt{-}get update }\KeywordTok{\&\&} \F...
+
+? 
+! Undefined control sequence.
+l.35 \ExtensionTok{$}\NormalTok
+                               { sudo apt{-}get update }\KeywordTok{\&\&} \F...
+
+? 
+! Undefined control sequence.
+l.35 ...malTok{ sudo apt{-}get update }\KeywordTok
+                                                  {\&\&} \FunctionTok{sudo}\...
+
+? 
+! Undefined control sequence.
+l.35 ...get update }\KeywordTok{\&\&} \FunctionTok
+                                                  {sudo}\NormalTok{ apt{-}ge...
+
+? 
+! Undefined control sequence.
+l.35 ...wordTok{\&\&} \FunctionTok{sudo}\NormalTok
+                                                  { apt{-}get upgrade}
+? 
+! Undefined control sequence.
+l.36 \ExtensionTok
+                  {$}\NormalTok{ sudo apt{-}get install mosquitto}
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.36 \ExtensionTok{$
+                    }\NormalTok{ sudo apt{-}get install mosquitto}
+? 
+! Undefined control sequence.
+l.36 \ExtensionTok{$}\NormalTok
+                               { sudo apt{-}get install mosquitto}
+? 
+
+! LaTeX Error: \begin{document} ended by \end{Highlighting}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.37 \end{Highlighting}
+                       
+? 
+
+! LaTeX Error: \begin{document} ended by \end{Shaded}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.38 \end{Shaded}
+                 
+? 
+
+Overfull \hbox (60.87239pt too wide) in paragraph at lines 33--39
+[]\TU/lmr/m/n/10 [] # We[]re using the raspbian image for the rpi $[][][][][]$
+ []
+
+
+! LaTeX Error: Environment Shaded undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.45 \begin{Shaded}
+                   
+? 
+
+! LaTeX Error: Environment Highlighting undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.46 \begin{Highlighting}
+                         []
+? 
+! Undefined control sequence.
+l.47 \ExtensionTok
+                  {$}\NormalTok{ mosquitto }\AttributeTok{{-}c}\NormalTok{ m...
+
+? 
+! Extra }, or forgotten $.
+<recently read> }
+                 
+l.47 \ExtensionTok{$}
+                     \NormalTok{ mosquitto }\AttributeTok{{-}c}\NormalTok{ m...
+
+? 
+! Undefined control sequence.
+l.47 \ExtensionTok{$}\NormalTok
+                               { mosquitto }\AttributeTok{{-}c}\NormalTok{ m...
+
+? 
+! Undefined control sequence.
+l.47 ...Tok{$}\NormalTok{ mosquitto }\AttributeTok
+                                                  {{-}c}\NormalTok{ mosquitt...
+
+? 
+! Undefined control sequence.
+l.47 ...{ mosquitto }\AttributeTok{{-}c}\NormalTok
+                                                  { mosquitto.conf }\Attribu...
+
+? 
+! Undefined control sequence.
+l.47 ...}\NormalTok{ mosquitto.conf }\AttributeTok
+                                                  {{-}v}
+? 
+
+! LaTeX Error: \begin{document} ended by \end{Highlighting}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.48 \end{Highlighting}
+                       
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.48 \end{Highlighting}
+                       
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.48 \end{Highlighting}
+                       
+? 
+
+! LaTeX Error: \begin{document} ended by \end{Shaded}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.49 \end{Shaded}
+                 
+? 
+) (../technical-docs/linux-router.tex
+Overfull \hbox (5.43451pt too wide) in paragraph at lines 2--2
+[]\TU/lmr/bx/n/12 Configure your Linux Computer as an AP of the project 
+ []
+
+! Undefined control sequence.
+l.10 \tightlist
+               
+? 
+[14]
+! Undefined control sequence.
+l.22 \tightlist
+               
+? 
+! Undefined control sequence.
+<recently read> \href 
+                      
+l.24   \href
+            {https://github.com/lakinduakash/linux-wifi-hotspot}{Linux Wifi
+? 
+! Undefined control sequence.
+l.32 \tightlist
+               
+? 
+! Undefined control sequence.
+l.46 \href
+          {https://github.com/lakinduakash/linux-wifi-hotspot}{Linux Wifi
+? 
+! Undefined control sequence.
+l.48 \href
+          {https://wiki.gentoo.org/wiki/Hostapd}{hostapd}: For creating the
+? 
+! Undefined control sequence.
+l.50 \href
+          {https://wiki.archlinux.org/title/Dnsmasq}{dnsmasq}: For adding
+? 
+! Undefined control sequence.
+l.52 \href
+          {https://wiki.archlinux.org/title/Iptables}{iptables}: For
+? 
+
+Overfull \hbox (37.59206pt too wide) in paragraph at lines 45--56
+ \TU/lmr/bx/n/10 Patch the create_ap program[] \TU/lmr/m/n/10 By default, https
+://github.com/lakinduakash/linux-
+ []
+
+
+Overfull \hbox (45.27502pt too wide) in paragraph at lines 45--56
+\TU/lmr/m/n/10 wifi-hotspotLinux Wifi Hotspot executes: - https://wiki.gentoo.o
+rg/wiki/Hostapdhostapd:
+ []
+
+
+Overfull \hbox (23.02pt too wide) in paragraph at lines 45--56
+\TU/lmr/m/n/10 For creating the wifi access point - https://wiki.archlinux.org/
+title/Dnsmasqdnsmasq:
+ []
+
+
+Overfull \hbox (49.64893pt too wide) in paragraph at lines 45--56
+\TU/lmr/m/n/10 For adding DHCP server to the network. - https://wiki.archlinux.
+org/title/Iptablesiptables:
+ []
+
+! Undefined control sequence.
+l.67 \href
+          {https://github.com/lakinduakash/linux-wifi-hotspot/blob/d73242ab8...
+
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.67 ...65275f630b8bc306b725c5/src/scripts/create_
+                                                  ap\#L1762}{you
+? 
+! Extra }, or forgotten $.
+l.67 ...8bc306b725c5/src/scripts/create_ap\#L1762}
+                                                  {you
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.69 
+     
+? 
+
+Overfull \hbox (490.88956pt too wide) in paragraph at lines 63--69
+\TU/lmr/m/n/10 https://github.com/lakinduakash/linux-wifi-hotspot/blob/d73242ab
+812284b5ed65275f630b8bc306b725c5/src/scripts/create$[]\OML/cmm/m/it/10 p\OT1/cm
+r/m/n/10 #\OML/cmm/m/it/10 L\OT1/cmr/m/n/10 1762[]\OML/cmm/m/it/10 :$ 
+ []
+
+
+! LaTeX Error: Environment Shaded undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.74 \begin{Shaded}
+                   
+? 
+
+! LaTeX Error: Environment Highlighting undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.75 \begin{Highlighting}
+                         []
+? 
+! Undefined control sequence.
+l.76 \ExtensionTok
+                  {$}\NormalTok{ whereis create\_ap}
+? 
+! Extra }, or forgotten $.
+<recently read> }
+                 
+l.76 \ExtensionTok{$}
+                     \NormalTok{ whereis create\_ap}
+? 
+! Undefined control sequence.
+l.76 \ExtensionTok{$}\NormalTok
+                               { whereis create\_ap}
+? 
+! Undefined control sequence.
+l.77 \CommentTok
+                {\# /usr/bin/create\_ap if you\textquotesingle{}re in archli...
+
+? 
+
+LaTeX Warning: Command \textquotesingle invalid in math mode on input line 77.
+
+! You can't use `\XeTeXglyph' in math mode.
+\remove@tlig #1->\XeTeXglyph 
+                             \numexpr \XeTeXcharglyph #1\relax 
+l.77 .../usr/bin/create\_ap if you\textquotesingle
+                                                  {}re in archlinux}
+? 
+! You can't use `\numexpr' in math mode.
+\remove@tlig #1->\XeTeXglyph \numexpr 
+                                      \XeTeXcharglyph #1\relax 
+l.77 .../usr/bin/create\_ap if you\textquotesingle
+                                                  {}re in archlinux}
+? 
+! You can't use `\XeTeXcharglyph' in math mode.
+\remove@tlig ...TeXglyph \numexpr \XeTeXcharglyph 
+                                                  #1\relax 
+l.77 .../usr/bin/create\_ap if you\textquotesingle
+                                                  {}re in archlinux}
+? 
+
+! LaTeX Error: \begin{document} ended by \end{Highlighting}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.78 \end{Highlighting}
+                       
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.78 \end{Highlighting}
+                       
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.78 \end{Highlighting}
+                       
+? 
+
+! LaTeX Error: \begin{document} ended by \end{Shaded}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.79 \end{Shaded}
+                 
+? 
+
+! LaTeX Error: Environment Shaded undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.83 \begin{Shaded}
+                   
+? 
+
+! LaTeX Error: Environment Highlighting undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.84 \begin{Highlighting}
+                         []
+? 
+! Undefined control sequence.
+l.85 \ExtensionTok
+                  {$}\NormalTok{ patch /usr/bin/create\_ap }\OperatorTok{\te...
+
+? 
+! Extra }, or forgotten $.
+<recently read> }
+                 
+l.85 \ExtensionTok{$}
+                     \NormalTok{ patch /usr/bin/create\_ap }\OperatorTok{\te...
+
+? 
+! Undefined control sequence.
+l.85 \ExtensionTok{$}\NormalTok
+                               { patch /usr/bin/create\_ap }\OperatorTok{\te...
+
+? 
+! Undefined control sequence.
+l.85 ...k{ patch /usr/bin/create\_ap }\OperatorTok
+                                                  {\textless{}}\NormalTok{ c...
+
+? 
+
+LaTeX Warning: Command \textless invalid in math mode on input line 85.
+
+! Undefined control sequence.
+l.85 ...e\_ap }\OperatorTok{\textless{}}\NormalTok
+                                                  { create\_ap\_raspberry\_p...
+
+? 
+
+! LaTeX Error: \begin{document} ended by \end{Highlighting}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.86 \end{Highlighting}
+                       
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.86 \end{Highlighting}
+                       
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.86 \end{Highlighting}
+                       
+? 
+
+! LaTeX Error: \begin{document} ended by \end{Shaded}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.87 \end{Shaded}
+                 
+? 
+! Undefined control sequence.
+l.98 If you're following our \href
+                                  {}{network diagram} you don't have to
+? 
+[15]
+
+! LaTeX Error: Environment Shaded undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.107 \begin{Shaded}
+                    
+? 
+
+! LaTeX Error: Environment Highlighting undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.108 \begin{Highlighting}
+                          []
+? 
+! Undefined control sequence.
+l.109 \ExtensionTok
+                   {$}\NormalTok{ ip a}
+? 
+! Extra }, or forgotten $.
+<recently read> }
+                 
+l.109 \ExtensionTok{$}
+                      \NormalTok{ ip a}
+? 
+! Undefined control sequence.
+l.109 \ExtensionTok{$}\NormalTok
+                                { ip a}
+? 
+! Undefined control sequence.
+l.110 \ExtensionTok
+                   {....}
+? 
+! Undefined control sequence.
+l.111 \ExtensionTok
+                   {17:}\NormalTok{ wlp0s20f0u2: }\OperatorTok{\textless{}}\...
+
+? 
+! Undefined control sequence.
+l.111 \ExtensionTok{17:}\NormalTok
+                                  { wlp0s20f0u2: }\OperatorTok{\textless{}}\...
+
+? 
+! Undefined control sequence.
+l.111 ...7:}\NormalTok{ wlp0s20f0u2: }\OperatorTok
+                                                  {\textless{}}\NormalTok{BR...
+
+? 
+
+LaTeX Warning: Command \textless invalid in math mode on input line 111.
+
+! Undefined control sequence.
+l.111 ...0u2: }\OperatorTok{\textless{}}\NormalTok
+                                                  {BROADCAST,MULTICAST,UP,LO...
+
+? 
+! Undefined control sequence.
+l.111 ...DCAST,MULTICAST,UP,LOWER\_UP}\OperatorTok
+                                                  {\textgreater{}}\NormalTok...
+
+? 
+
+LaTeX Warning: Command \textgreater invalid in math mode on input line 111.
+
+! Undefined control sequence.
+l.111 ...UP}\OperatorTok{\textgreater{}}\NormalTok
+                                                  { mtu 2312 qdisc mq state ...
+
+? 
+! Undefined control sequence.
+l.112 \ExtensionTok
+                   {18:}\NormalTok{ enp0s20f0u6: }\OperatorTok{\textless{}}\...
+
+? 
+! Undefined control sequence.
+l.112 \ExtensionTok{18:}\NormalTok
+                                  { enp0s20f0u6: }\OperatorTok{\textless{}}\...
+
+? 
+! Undefined control sequence.
+l.112 ...8:}\NormalTok{ enp0s20f0u6: }\OperatorTok
+                                                  {\textless{}}\NormalTok{BR...
+
+? 
+
+LaTeX Warning: Command \textless invalid in math mode on input line 112.
+
+! Undefined control sequence.
+l.112 ...0u6: }\OperatorTok{\textless{}}\NormalTok
+                                                  {BROADCAST,MULTICAST,UP,LO...
+
+? 
+! Undefined control sequence.
+l.112 ...DCAST,MULTICAST,UP,LOWER\_UP}\OperatorTok
+                                                  {\textgreater{}}\NormalTok...
+
+? 
+
+LaTeX Warning: Command \textgreater invalid in math mode on input line 112.
+
+! Undefined control sequence.
+l.112 ...UP}\OperatorTok{\textgreater{}}\NormalTok
+                                                  { mtu 1500 qdisc fq\_codel...
+
+? 
+
+! LaTeX Error: \begin{document} ended by \end{Highlighting}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.113 \end{Highlighting}
+                        
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.113 \end{Highlighting}
+                        
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.113 \end{Highlighting}
+                        
+? 
+
+! LaTeX Error: \begin{document} ended by \end{Shaded}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.114 \end{Shaded}
+                  
+? 
+
+Overfull \hbox (802.29956pt too wide) in paragraph at lines 108--115
+[]\TU/lmr/m/n/10 [] $[][][][][][][][][][][][][][]$
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--115
+
+ []
+
+
+! LaTeX Error: Environment Shaded undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.130 \begin{Shaded}
+                    
+? 
+
+! LaTeX Error: Environment Highlighting undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.131 \begin{Highlighting}
+                          []
+? 
+! Undefined control sequence.
+l.132 \ExtensionTok
+                   {$}\NormalTok{ sudo create\_ap }\AttributeTok{{-}{-}confi...
+
+? 
+! Extra }, or forgotten $.
+<recently read> }
+                 
+l.132 \ExtensionTok{$}
+                      \NormalTok{ sudo create\_ap }\AttributeTok{{-}{-}confi...
+
+? 
+! Undefined control sequence.
+l.132 \ExtensionTok{$}\NormalTok
+                                { sudo create\_ap }\AttributeTok{{-}{-}confi...
+
+? 
+! Undefined control sequence.
+l.132 ...NormalTok{ sudo create\_ap }\AttributeTok
+                                                  {{-}{-}config}\NormalTok{ ...
+
+? 
+! Undefined control sequence.
+l.132 ...ap }\AttributeTok{{-}{-}config}\NormalTok
+                                                  { ap.conf}
+? 
+
+! LaTeX Error: \begin{document} ended by \end{Highlighting}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.133 \end{Highlighting}
+                        
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.133 \end{Highlighting}
+                        
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.133 \end{Highlighting}
+                        
+? 
+
+! LaTeX Error: \begin{document} ended by \end{Shaded}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.134 \end{Shaded}
+                  
+? 
+) [16] (./main.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
- ) 
+ )
+(\end occurred inside a group at level 1)
+
+### simple group (level 1) entered at line 67 ({)
+### bottom level 
 Here is how much of TeX's memory you used:
- 1036 strings out of 476683
- 18992 string characters out of 5809791
- 1852018 words of memory out of 5000000
- 21297 multiletter control sequences out of 15000+600000
+ 1064 strings out of 476683
+ 19671 string characters out of 5809791
+ 1853018 words of memory out of 5000000
+ 21318 multiletter control sequences out of 15000+600000
  515103 words of font info for 51 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  55i,6n,62p,440b,205s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (14 pages).
+Output written on main.pdf (16 pages).

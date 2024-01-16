@@ -1,0 +1,137 @@
+\subsection{Configure your Linux Computer as an AP of the
+project}\label{configure-your-linux-computer-as-an-ap-of-the-project}
+
+Please watch the figure on assets/network-diagram.png for understanding
+this article.
+
+\subsubsection{Hardware you need:}\label{hardware-you-need}
+
+\begin{itemize}
+\tightlist
+\item
+  A wifi adapter network that supports AP virtual interface (we used an
+  Alfa AWUS036ACH-C, but some integrated wifi cards can handle
+  promiscuous mode and AP virtual interfaces)
+\item
+  A computer running Linux with systemd.
+\end{itemize}
+
+\subsubsection{Software you need:}\label{software-you-need}
+
+\begin{itemize}
+\tightlist
+\item
+  \href{https://github.com/lakinduakash/linux-wifi-hotspot}{Linux Wifi
+  Hotspot}
+\end{itemize}
+
+\subsubsection{Brief overview of the
+steps:}\label{brief-overview-of-the-steps}
+
+\begin{itemize}
+\tightlist
+\item
+  Patch the create\_ap program that comes with Linux Wifi Hotspot for
+  enabling an static IP for the raspberry pi.
+\item
+  Change the Internet interface and the Wifi interface on the ap.conf.
+\item
+  Execute!
+\end{itemize}
+
+\paragraph{Patch the create\_ap
+program}\label{patch-the-create_ap-program}
+
+By default,
+\href{https://github.com/lakinduakash/linux-wifi-hotspot}{Linux Wifi
+Hotspot} executes: -
+\href{https://wiki.gentoo.org/wiki/Hostapd}{hostapd}: For creating the
+wifi access point -
+\href{https://wiki.archlinux.org/title/Dnsmasq}{dnsmasq}: For adding
+DHCP server to the network. -
+\href{https://wiki.archlinux.org/title/Iptables}{iptables}: For
+forwarding all the traffic that comes from the AP network (in other
+words, in your AP network your computer acts as a router, forwarding the
+packets).
+
+Using the \textbf{create\_ap} script that comes with the Linux Wifi
+Hotspot packages become very handy, since we don't have to create the
+hostapd, dnsmasq and iptables ourselves, buuut has a catch: \textbf{it
+doesn't allow us to put dhcp rules (such as static ip for the raspberry
+pi) on his config file}.
+
+This is because the \textbf{create\_ap} script automatically generates
+the configuration for hostapd, dnsmasq and iptables given the
+configuration file you gave it (and obviously this config file doesn't
+have an option for adding dhcp rules\ldots),
+\href{https://github.com/lakinduakash/linux-wifi-hotspot/blob/d73242ab812284b5ed65275f630b8bc306b725c5/src/scripts/create_ap\#L1762}{you
+can watch the code that generetes the dnsmasq rules here}.
+
+So, we had to patch the \textbf{create\_ap} script for adding our custom
+rule! Yay! First of all find where is the \textbf{create\_ap} script
+living on your computer:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{$}\NormalTok{ whereis create\_ap}
+\CommentTok{\# /usr/bin/create\_ap if you\textquotesingle{}re in archlinux}
+\end{Highlighting}
+\end{Shaded}
+
+Then, patch it with:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{$}\NormalTok{ patch /usr/bin/create\_ap }\OperatorTok{\textless{}}\NormalTok{ create\_ap\_raspberry\_pi.patch}
+\end{Highlighting}
+\end{Shaded}
+
+Be aware that this will add a custom rule for the dnsmasq program, which
+is:
+
+\begin{verbatim}
+dhcp-host=e4:5f:01:f2:b4:df,192.168.33.213
+\end{verbatim}
+
+If you don't have the same raspberry we're using, the raspberry mac
+address will change, this means you will have to tweak this patch file.
+If you're following our \href{}{network diagram} you don't have to
+change the ip address.
+
+\paragraph{Change the interfaces of the config
+file}\label{change-the-interfaces-of-the-config-file}
+
+Every linux distribution names his network devices differently (and
+everyone has different devices), so execute the following command:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{$}\NormalTok{ ip a}
+\ExtensionTok{....}
+\ExtensionTok{17:}\NormalTok{ wlp0s20f0u2: }\OperatorTok{\textless{}}\NormalTok{BROADCAST,MULTICAST,UP,LOWER\_UP}\OperatorTok{\textgreater{}}\NormalTok{ mtu 2312 qdisc mq state UP group default qlen 1000}
+\ExtensionTok{18:}\NormalTok{ enp0s20f0u6: }\OperatorTok{\textless{}}\NormalTok{BROADCAST,MULTICAST,UP,LOWER\_UP}\OperatorTok{\textgreater{}}\NormalTok{ mtu 1500 qdisc fq\_codel state UP group default qlen 1000}
+\end{Highlighting}
+\end{Shaded}
+
+In my case I see that the Alfa Wifi Card is named wlp0s20f0u2, and the
+ethernet connection to the internet is named enp0s20f0u6, so change the
+ap.conf acording to this interface names:
+
+\begin{verbatim}
+....
+WIFI_IFACE=wlp0s20f0u2
+INTERNET_IFACE=enp0s20f0u6
+\end{verbatim}
+
+\paragraph{Run the access point!}\label{run-the-access-point}
+
+Everything is ready now! Execute:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{$}\NormalTok{ sudo create\_ap }\AttributeTok{{-}{-}config}\NormalTok{ ap.conf}
+\end{Highlighting}
+\end{Shaded}
+
+If any problem occurs is 99\% problem of your wifi card. See the
+requirements on the hardware section.
