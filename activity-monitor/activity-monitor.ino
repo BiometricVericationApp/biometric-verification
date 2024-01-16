@@ -6,15 +6,15 @@
 #include <freertos/semphr.h>
 #include "common.h"
 #include "common_ultrasound.h"
-#include "leds.h"
 #include "presence.h"
-#include "lcd.h"
 #include "timeout.h"
 #include "user-data-collector.h"
+#include "hardware/wifi.h"
+#include "hardware/leds.h"
+#include "hardware/lcd.h"
 
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
-void WiFiTask(void *pvParameters);
 void MQTTTask(void *pvParameters);
 void reconnectMQTT();
 void mqttCallback(char* topic, byte* payload, unsigned int length);
@@ -23,13 +23,17 @@ void executeCurrentAction(void *pvParameters);
 
 void setup() {
   Serial.begin(115200);
+
+  /* SetUp Hardware Components */
+  setUpWifi();
   setUpLcd();
   setUpLeds();
+  
+  /* SetUp Software (for locks, initial vars, etc) */
   setUpAction();
   setUpTimeout();
   setUpDataCollector();
   setUpPresence();
-  xTaskCreate(WiFiTask, "WiFi Task", 10000, NULL, 1, NULL);
   xTaskCreate(MQTTTask, "MQTT Task", 10000, NULL, 1, NULL);
   xTaskCreate(executeCurrentAction, "Execute a current action", 10000, NULL, 1, NULL);
 }
@@ -38,22 +42,8 @@ void setup() {
 void loop() {}
 
 /*
-    MQTT and wifi related
+    MQTT
 */
-
-void WiFiTask(void *pvParameters) {
-  for (;;) {
-    if (WiFi.status() != WL_CONNECTED) {
-      WiFi.begin(SSID_WIFI, SSID_PASSWORD);
-      while (WiFi.status() != WL_CONNECTED) {
-        vTaskDelay(500 / portTICK_PERIOD_MS);
-      }
-      Serial.println("\nConnected to WiFi");
-    }
-    vTaskDelay(10000 / portTICK_PERIOD_MS);
-  }
-}
-
 
 void MQTTTask(void *pvParameters) {
   mqttClient.setServer(IP_MQTT_BROKER, PORT_MQTT_BROKER);
