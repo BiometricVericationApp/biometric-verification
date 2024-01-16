@@ -2,7 +2,7 @@
 #define USER_DATA_COLLECTOR_
 
 #include "lock.h"
-#include "action.h"
+#include "timeout.h"
 
 SemaphoreHandle_t bpmSemaphore;
 SemaphoreHandle_t gsrSemaphore;

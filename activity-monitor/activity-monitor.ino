@@ -10,10 +10,7 @@
 #include "presence.h"
 #include "lcd.h"
 #include "timeout.h"
-#include "action.h"
 #include "user-data-collector.h"
-
-#define THRESHOLD 4
 
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
@@ -35,7 +32,6 @@ void setup() {
   xTaskCreate(WiFiTask, "WiFi Task", 10000, NULL, 1, NULL);
   xTaskCreate(MQTTTask, "MQTT Task", 10000, NULL, 1, NULL);
   xTaskCreate(executeCurrentAction, "Execute a current action", 10000, NULL, 1, NULL);
-  xTaskCreate(markAsNonUpdated, "Mark as None", 10000, NULL, 1, NULL);
 }
 
 
@@ -161,15 +157,4 @@ void executeActionDistance() {
 void printDistanceInLeds(float proximity) {
     int ledsToTurnOn = map(proximity, 0, DETECTION_RANGE, NUM_LEDS, 0);
     turnOnLeds(ledsToTurnOn);
-}
-
-void markAsNonUpdated(void *pvParameters) {
-  for (;;) {
-    int counter = getNumberOfNoPackages();
-    if (counter >= THRESHOLD) {
-        updateAction(None);
-    }
-    updateNumberOfNoPackages();
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-  }
 }

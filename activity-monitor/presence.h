@@ -7,7 +7,7 @@
 
 #include <Arduino.h>
 #include "lock.h"
-#include "action.h"
+#include "timeout.h"
 
 #define DETECTION_RANGE 50.0
 #define TOLERANCE 5.0
