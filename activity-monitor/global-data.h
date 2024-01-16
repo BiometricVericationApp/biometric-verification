@@ -2,6 +2,7 @@
 #include <freertos/task.h>
 #include <freertos/semphr.h>
 #include "presence.h"
+#include "lock.h"
 
 #define INCLUDE_vTaskSuspend  1
 
@@ -44,26 +45,23 @@ void setUpGlobalData() {
 }
 
 int getNumberOfNoPackages() {
-  int c;
-  if (xSemaphoreTake(counterSemaphore, portMAX_DELAY)) {
+    int c;
+    WITH_SEMAPHORE(counterSemaphore,{
       c = counter;
-  }
-  xSemaphoreGive(counterSemaphore);
-  return c;
+    });
+    return c;
 }
 
 void updateNumberOfNoPackages() {
-  if (xSemaphoreTake(counterSemaphore, portMAX_DELAY)) {
-      counter += 1;
-  }
-  xSemaphoreGive(counterSemaphore);
+  WITH_SEMAPHORE(counterSemaphore, {
+    counter += 1;
+  });
 }
 
 void resetNumberOfPackages() {
-  if (xSemaphoreTake(counterSemaphore, portMAX_DELAY)) {
-      counter = 0;
-  }
-  xSemaphoreGive(counterSemaphore);
+  WITH_SEMAPHORE(counterSemaphore, {
+    counter = 0;
+  });
 }
 
 /*
@@ -71,19 +69,17 @@ void resetNumberOfPackages() {
  */
 
 void updateAction(LastAction action) {
-  if (xSemaphoreTake(actionSemaphore, portMAX_DELAY)) {
-      info.lastAction = action;
-      resetNumberOfPackages();
-  }
-  xSemaphoreGive(actionSemaphore);
+  WITH_SEMAPHORE(actionSemaphore, {
+    info.lastAction = action;
+    resetNumberOfPackages();
+  });
 }
 
 LastAction getLastAction() {
   LastAction action;
-  if (xSemaphoreTake(actionSemaphore, portMAX_DELAY)) {
-      action = info.lastAction;
-  }
-  xSemaphoreGive(actionSemaphore);
+  WITH_SEMAPHORE(actionSemaphore, {
+    action = info.lastAction;
+  });
   return action;
 }
 
@@ -93,35 +89,32 @@ LastAction getLastAction() {
 
 
 void updateLeftDistance(float newDistance) {
-  if (xSemaphoreTake(leftDistanceSemaphore, portMAX_DELAY)) {
+  WITH_SEMAPHORE(leftDistanceSemaphore, {
       info.distance.current.leftDistance = newDistance;
-  }
-  xSemaphoreGive(leftDistanceSemaphore);
+  });
 }
 
 void updateRightDistance(float newDistance) {
-  if (xSemaphoreTake(rightDistanceSemaphore, portMAX_DELAY)) {
+  WITH_SEMAPHORE(rightDistanceSemaphore, {
       info.distance.current.rightDistance = newDistance;
-  }
-  xSemaphoreGive(rightDistanceSemaphore);
+  });
 }
 
 
 void updateLastDistance(DistanceResult result) {
-  if (xSemaphoreTake(lastDistanceSemaphore, portMAX_DELAY)) {
+  WITH_SEMAPHORE(lastDistanceSemaphore, {
       info.distance.last = result;
       updateAction(Distance);
-  }
-  xSemaphoreGive(lastDistanceSemaphore);
+  });
 }
 
 struct DistanceInfo getDistance() {
     struct DistanceInfo dist;
-    if (xSemaphoreTake(rightDistanceSemaphore, portMAX_DELAY) && xSemaphoreTake(leftDistanceSemaphore, portMAX_DELAY)) {
-        memcpy(&dist, &(info.distance), sizeof(DistanceInfo));
-    }
-    xSemaphoreGive(leftDistanceSemaphore);
-    xSemaphoreGive(rightDistanceSemaphore);
+    WITH_SEMAPHORE(rightDistanceSemaphore, {
+        WITH_SEMAPHORE(leftDistanceSemaphore, {
+            memcpy(&dist, &(info.distance), sizeof(DistanceInfo));
+        });
+    });
     return dist;
 }
 
@@ -131,19 +124,17 @@ struct DistanceInfo getDistance() {
  */
 
 void updateBpm(float bpm) {
-  if (xSemaphoreTake(bpmSemaphore, portMAX_DELAY)) {
+  WITH_SEMAPHORE(bpmSemaphore, {
       info.heart.bpm = bpm;
       updateAction(Heart);
-  }
-  xSemaphoreGive(bpmSemaphore);
+  });
 }
 
 float getBpm() {
   float bpm;
-  if (xSemaphoreTake(bpmSemaphore, portMAX_DELAY)) {
+  WITH_SEMAPHORE(bpmSemaphore, {
       bpm = info.heart.bpm;
-  }
-  xSemaphoreGive(bpmSemaphore);
+  });
   return bpm;
 }
 
@@ -152,18 +143,16 @@ float getBpm() {
  */
 
 void updateGsr(float gsr) {
-  if (xSemaphoreTake(gsrSemaphore, portMAX_DELAY)) {
+  WITH_SEMAPHORE(gsrSemaphore, {
       info.heart.gsr = gsr;
       updateAction(Heart);
-  }
-  xSemaphoreGive(gsrSemaphore);
+  });
 }
 
 float getGsr() {
   float gsr;
-  if (xSemaphoreTake(gsrSemaphore, portMAX_DELAY)) {
+  WITH_SEMAPHORE(gsrSemaphore, {
       gsr = info.heart.gsr;
-  }
-  xSemaphoreGive(gsrSemaphore);
+  });
   return gsr;
 }

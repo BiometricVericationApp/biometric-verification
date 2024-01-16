@@ -1,7 +1,6 @@
 /*
  * DETECTION_RANGE => Range of Detection
  * TOLERANCE => Error marge for considering an object in center
- * NOISE_THRESHOLD => Ignore changes that changed below this threshold
 */
 #ifndef PRESENCE_H_   /* Include guard */
 #define PRESENCE_H_
@@ -10,12 +9,10 @@
 
 #define DETECTION_RANGE 50.0
 #define TOLERANCE 5.0
-#define NOISE_THRESHOLD 2.0
 
 #define CENTER_STR "Center"
 #define LEFT_STR "Left"
 #define RIGHT_STR "Right"
-#define NONE_STR "None"
 
 struct Distance {
     float leftDistance;
@@ -63,4 +60,3 @@ DistanceResult checkForPresenceAndDirection(DistanceInfo info) {
 }
 
 #endif // PRESENCE_H_
-
