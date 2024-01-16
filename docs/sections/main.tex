@@ -2,6 +2,8 @@
 \usepackage[utf8]{inputenc} 
 \usepackage{graphicx}
 \usepackage{hyperref}
+
+\hypersetup{colorlinks=true,linkcolor=blue, linktocpage}
 \usepackage{xcolor}
 \usepackage{framed}
 \definecolor{shadecolor}{rgb}{1,0,0}
@@ -10,7 +12,21 @@
 \newcommand{\subsecautorefname}{subsection}
 \newcommand{\subsubsecautorefname}{subsubsection}
 
-\title{Biometric Authentication System Documentation} \author{Authors}
+
+\title{Biometric Authentication System Documentation} 
+\author{
+  Ferran, Aran Domingo\\
+  \texttt{fad3@alumnes.udl.cat}
+  \and
+  Oriol, Agost Batalla\\
+  \texttt{oab4@alumnes.udl.cat}
+  \and
+  Alexandru, Matei\\
+  \texttt{am70@alumnes.udl.cat}
+  \and
+  Pablo, Fraile Alonso\\
+  \texttt{pfa4@alumnes.udl.cat}
+}
 \date{\today}
 
 \begin{document}
@@ -34,7 +50,7 @@ technical insights into the component integration and operation.
 Authentication System was achieved through the accomplishment of several key
 milestones. These milestones collectively ensured the project's progress was
 systematically tracked and adhered to the proposed timeline. Note that component specific milestones with more
-detailed information, priorities and dependencies can be found on \autoref{component-implementations}
+detailed information, priorities and dependencies can be found on section \ref{sec:component-implementations}.
 
 \begin{enumerate} 
     \item \textbf{Project Initiation:} Defining scope, objectives,
@@ -53,10 +69,17 @@ and project delivery.
 components that comprise our system, detailing their objectives, functionalities,
 and integration with the broader system context.
 
+\newpage
 \input{raspberry.tex}
+\newpage
 \input{activity_monitor.tex}
+\newpage
 \input{user_data_collector.tex}
+\newpage
 \input{presence.tex}
+\newpage
+\input{phone.tex}
+\newpage
 
 \section{User Story} As the user approaches the authentication system, he is
 immediately detected by the ultrasonic sensors, which guide him to stand in the
@@ -100,6 +123,15 @@ The figure \ref{figura:mqtt} shows the mqtt tree structure of the overall projec
     \label{figura:mqtt}
 \end{figure}
 
+\newpage
 \input{../technical-docs/rpi.tex}
+\newpage
 \input{../technical-docs/linux-router.tex}
+
+\newpage
+\section{Source Code}
+You can find all the code (and even this document on latex format!) on the \href{https://github.com/BiometricVericationApp/biometric-verification/tree/main}{following github organization}.\\
+
+The repository will be public on \textbf{January 18th of 2024}.
+
 \end{document}

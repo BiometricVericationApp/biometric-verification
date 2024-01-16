@@ -20,23 +20,24 @@ The development of the user data collector involved the following milestones:
 
 \subsubsection{Achieved milestones, execution order, priority, and dependencies}
 \begin{enumerate}
-    \item \textbf{Milestone 1: Read data from BPM and galvanic}
+    \item \textbf{Milestone 1/2: Read data from BPM and galvanic}
         \begin{enumerate}
             \item \textit{Priority:} High. Fundamental for data collection.
-            \item \textit{Dependencies:} Working hardware setup.
+            \item \textit{Dependencies:} Working hardware setup, I2C Library.
             \item \textit{Execution Order:} First, as it is the backbone of this system.
             \item \textit{Assigned to:} Ferran
         \end{enumerate}
 
-    \item \textbf{Milestone 2: Establish connection with MQTT and publish data}
+
+    \item \textbf{Milestone 3: Getting data from Arduino to ESP01}
         \begin{enumerate}
-            \item \textit{Priority:} Medium. Important, the rest of the system needs this data.
-            \item \textit{Dependencies:} Working WiFi setup.
-            \item \textit{Execution Order:} Second, needed for debugging the data retrieval from Arduino to ESP01.
+            \item \textit{Priority:} High. Essential for usage of real data.
+            \item \textit{Dependencies:} Functional hardware setup and connection in serial.
+            \item \textit{Execution Order:} Second, focusing on data transmission.
             \item \textit{Assigned to:} Alex
         \end{enumerate}
 
-    \item \textbf{Milestone 3: Getting data from Arduino to ESP01}
+    \item \textbf{Milestone 4/5: Establishing connection to MQTT and publishing results}
         \begin{enumerate}
             \item \textit{Priority:} High. Essential for usage of real data.
             \item \textit{Dependencies:} Functional hardware setup and MQTT communication.
@@ -55,7 +56,7 @@ The biometric data collection system comprises the following hardware components
 \end{itemize}
 
 \subsubsection{Hardware setup diagram}
-The following diagram illustrates the physical connections between the Arduino NANO-BLE33, ESP-01, and the biometric sensors (Heart-rate and GSR sensors).
+The following diagram (figure \ref{fig:hardware-setup}) illustrates the physical connections between the Arduino NANO-BLE33, ESP-01, and the biometric sensors (Heart-rate and GSR sensors).
 
 \begin{figure}[h]
     \centering

@@ -58,8 +58,6 @@ Approximately 15 hours were dedicated to developing the System Monitor, mainly s
     \label{fig:esp32_system_monitor}
 \end{figure}
 
-\paragraph{Data Flow and Configuration}
-
 \subsubsection{MQTT Tree Structure}
 The MQTT protocol in the presence and location project uses a structured approach to manage the data flow. Below is the outline of the MQTT topics and their functions:
 
@@ -68,6 +66,3 @@ The MQTT protocol in the presence and location project uses a structured approac
     \item \textbf{sensor1/distance:} This topic is used by the first ESP-01 module. It publishes the distance data measured by its connected ultrasonic sensor.
     \item \textbf{sensor2/distance:} Similar to the first, this topic is for the second ESP-01 module.
 \end{itemize}
-
-\paragraph{Data Organization and Utilization}
-The data sent to these topics include numerical values representing the measured distances. 

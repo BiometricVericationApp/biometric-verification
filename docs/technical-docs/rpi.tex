@@ -43,4 +43,26 @@ $ mosquitto -c mosquitto.conf -v
 
 It will serve the mqtt server on port 1883.
 
-\subsubsection{}\label{section}
+
+This doesn't make the server boot on startup, so we created a system.d service that does just that! Enable it with:
+\begin{verbatim}
+cp mosquitto.service /etc/systemd/system/ 
+sudo systemctl enable mosquitto.service
+sudo systemctl start mosquitto.service
+\end{verbatim}
+
+\subsubsection{Run authenticate ML model}\label{run-ia}
+Download the model code, and be sure that you have a version of python3 installed.
+
+Then, enter the source folder and execute:
+\begin{verbatim}
+$ pip install -r requirements.txt
+$ python3 main.py
+\end{verbatim}
+
+This doesn't start the program at start, so we created a system.d service that does just that!
+\begin{verbatim}
+cp predict.service /etc/systemd/system/ 
+sudo systemctl enable predict.service
+sudo systemctl start predict.service
+\end{verbatim}
