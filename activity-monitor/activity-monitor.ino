@@ -4,9 +4,9 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/semphr.h>
-#include "presence.h"
 #include "timeout.h"
-#include "user-data-collector.h"
+#include "integrations/user-data-collector.h"
+#include "integrations/presence.h"
 #include "hardware/wifi.h"
 #include "hardware/leds.h"
 #include "hardware/lcd.h"

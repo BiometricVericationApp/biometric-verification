@@ -6,14 +6,16 @@
 #include <freertos/semphr.h>
 #include "common/lock.h"
 
-#define THRESHOLD 4
-
 
 /*
  * file: timeout.h
  * description: saves and tells where to timeout an action (this means, 
  * when should we put nothing received on screen)
  */
+
+
+#define THRESHOLD 4
+
 
 enum LastAction {
     Heart,
