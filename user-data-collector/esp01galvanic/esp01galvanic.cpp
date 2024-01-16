@@ -20,7 +20,7 @@ void setup() {
 
 void setup_wifi() {
   delay(10);
-  WiFi.begin(SSID, PASSWORD);
+  WiFi.begin(SSID_WIFI, SSID_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
   }
