@@ -3,6 +3,7 @@
 #include <freertos/semphr.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+#include "lock.h"
 
 /*
  * name: lcd.h
@@ -24,15 +25,14 @@ enum ScreenLine {
 };
 
 void lcdPrint(String message, ScreenLine line) {
-  if (xSemaphoreTake(xSemaphoreLCD, portMAX_DELAY)) {
+  WITH_SEMAPHORE(xSemaphoreLCD, {
     lcd.setCursor(0, line);
     lcd.print(message);
     for (int i = message.length(); i < 16; i++) {
       lcd.print(" ");
     }
-    xSemaphoreGive(xSemaphoreLCD);
-    delay(100); 
-  }
+  });
+  delay(100); 
 }
 
 void lcdPrint(String message) {

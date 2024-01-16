@@ -1,15 +1,11 @@
-#ifndef LOCK_H_   /* Include guard */
+#ifndef LOCK_H_
 #define LOCK_H_
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/semphr.h>
 
-/*
- * Necessary for blocking the semaphores
- */
-
-#define INCLUDE_vTaskSuspend  1
+#define INCLUDE_vTaskSuspend  1 // Necessary for blocking the semaphores
 
 #define WITH_SEMAPHORE(semaphore, code) \
     if (xSemaphoreTake(semaphore, portMAX_DELAY)) { \

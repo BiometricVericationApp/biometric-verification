@@ -6,10 +6,12 @@
 #include <freertos/semphr.h>
 #include "common.h"
 #include "common_ultrasound.h"
+
 #include "leds.h"
 #include "presence.h"
 #include "lcd.h"
 #include "global-data.h"
+#include "user-data-collector.h"
 
 #define THRESHOLD 4
 
@@ -27,6 +29,8 @@ void setup() {
   setUpLcd();
   setUpLeds();
   setUpGlobalData();
+  setUpDataCollector();
+  setUpPresence();
   xTaskCreate(WiFiTask, "WiFi Task", 10000, NULL, 1, NULL);
   xTaskCreate(MQTTTask, "MQTT Task", 10000, NULL, 1, NULL);
   xTaskCreate(updateDevicesTask, "Update Devices Task", 10000, NULL, 1, NULL);
