@@ -4,9 +4,9 @@
 
 \begin{document}
 
-\section{Integration of Biometric Sensors with Arduino NANO-BLE33 and ESP-01}
+\subsection{Integration of Biometric Sensors with Arduino NANO-BLE33 and ESP-01}
 
-\subsection{Objective and Functionality}
+\subsubsection{Objective and Functionality}
 The user data collector is the part of the system responsible of collecting the users heart rate and galvanic skin resistance in order to later predict who is that user.
 \begin{itemize}
     \item Reading BPM and galvanic resistance data from the sensors on the Arduino NANO
@@ -14,7 +14,7 @@ The user data collector is the part of the system responsible of collecting the 
     \item Publishing the collected data to the corresponding MQTT topics (sensor3/heart and sensor3/galvanic)
 \end{itemize}
 
-\subsection{Project Definition and Milestones}
+\subsubsection{Project Definition and Milestones}
 The development of the user data collector involved the following milestones:
 \begin{enumerate}
     \item Read data from BPM.
@@ -24,7 +24,7 @@ The development of the user data collector involved the following milestones:
     \item Publish the results on their corresponding topics.
 \end{enumerate}
 
-\subsection{Achieved milestones, execution order, priority, and dependencies}
+\subsubsection{Achieved milestones, execution order, priority, and dependencies}
 \begin{enumerate}
     \item \textbf{Milestone 1: Read data from BPM and galvanic}
        - \textit{Priority:} High. Fundamental for data collection.
@@ -42,7 +42,7 @@ The development of the user data collector involved the following milestones:
        - \textit{Execution Order:} Third, focusing on data transmission.
 \end{enumerate}
 
-\subsection{Hardware setup}
+\subsubsection{Hardware setup}
 The biometric data collection system comprises the following hardware components:
 \begin{itemize}
     \item \textbf{Arduino NANO-BLE33:} Central to the collection and initial processing of biometric data, including heart rate and galvanic skin response (GSR).
@@ -51,7 +51,7 @@ The biometric data collection system comprises the following hardware components
     \item \textbf{GSR Sensor:} Attached to the Arduino for measuring galvanic skin response.
 \end{itemize}
 
-\subsection{Hardware setup diagram}
+\subsubsection{Hardware setup diagram}
 The following diagram illustrates the physical connections between the Arduino NANO-BLE33, ESP-01, and the biometric sensors (Heart-rate and GSR sensors).
 
 \begin{figure}[h]
@@ -62,7 +62,7 @@ The following diagram illustrates the physical connections between the Arduino N
 \end{figure}
 
 
-\subsection{ESP-01}
+\subsubsection{ESP-01}
 The ESP-01 module is programmed to receive the biometric data from the Arduino NANO-BLE33 and publish it to an MQTT broker. The implementation covers:
 \begin{itemize}
     \item Establishing a WiFi connection.
@@ -71,23 +71,23 @@ The ESP-01 module is programmed to receive the biometric data from the Arduino N
     \item Publishing the received data to the MQTT broker under the topic "sensor3/data".
 \end{itemize}
 
-\subsection{Challenges and Solutions}
+\subsubsection{Challenges and Solutions}
 During the integration of the biometric sensors with the Arduino and ESP-01, several challenges were encountered and subsequently addressed:
 \begin{itemize}
 \item \textbf{Serial Communication:} The initial challenge was to establish a stable and reliable serial communication between the Arduino NANO-BLE33 and the ESP-01. This was achieved by setting a consistent baud rate and implementing a protocol to ensure complete data packets were sent and received.
 \item \textbf{MQTT Connectivity:} Maintaining a stable MQTT connection, especially handling reconnections and network instability, was critical. This was addressed by implementing a reconnection strategy in the ESP-01’s software.
 \end{itemize}
 
-\subsection{Dedication Time}
+\subsubsection{Dedication Time}
 Approximately 30 hours were dedicated to developing the user data collection system, using most of the time on playing with malfunctioning or hard to use sensors.
 
-\subsection{MQTT Topics}
+\subsubsection{MQTT Topics}
 \begin{itemize}
     \item \textbf{sensor3/heart:} This is the topic used to publish heart rate biometric data.
     \item \textbf{sensor3/galvanic:} Used to publish galvanic resistance data.
 \end{itemize}
 
-\subsection{Conclusion}
+\subsubsection{Conclusion}
 The integration of the Arduino NANO-BLE33 with the ESP-01 for biometric data collection and transmission via MQTT represents a significant advancement in the biometric verification system. This setup not only provides real-time data monitoring but also enhances the system's capability to make a prediction on the user's identity.
 
 \end{document}

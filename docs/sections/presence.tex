@@ -4,15 +4,15 @@
 
 \begin{document}
 
-\section{Presence and location}
+\subsection{Presence and location}
 
-\subsection{Objective and Functionality}
+\subsubsection{Objective and Functionality}
 The presence and location is a set of two devices each with an ultrasonic sensor that determine user presence and location (left-right). Each of the sensors is responsible of sending collected data to their respective topic (sensor1/distance or sensor2/distance).
 
-\subsection{Project Definition and Milestones}
+\subsubsection{Project Definition and Milestones}
 The development of the presence and location system just involves establishing an MQTT connection with the broker to send the collected data from the ultrasonic sensors.
 
-\subsection{Achieved milestones, execution order, priority, and dependencies}
+\subsubsection{Achieved milestones, execution order, priority, and dependencies}
 \begin{enumerate}
     \item \textbf{Milestone 1: Establishing MQTT Communication}
        - \textit{Priority:} High. Fundamental for data transmission.
@@ -25,14 +25,14 @@ The development of the presence and location system just involves establishing a
        - \textit{Execution Order:} Second, building upon established communication.
 \end{enumerate}
 
-\subsection{Hardware setup}
+\subsubsection{Hardware setup}
 The hardware setup for the location and presence comprises:
 \begin{itemize}
     \item Two ESP-01 modules.
     \item Two ultrasonic sensor, one for each ESP-01 module.
 \end{itemize}
 
-\subsection{Software Implementation}
+\subsubsection{Software Implementation}
 The software, written in arduino programming language, has the following key functionalities:
 \begin{itemize}
     \item Connect to WiFi (and try to reconnect if needed).
@@ -41,16 +41,16 @@ The software, written in arduino programming language, has the following key fun
     \item Send the resulting data to the corresponding topic (sensor1/distance or sensor2/distance)
 \end{itemize}
 
-\subsection{Dedication Time}
+\subsubsection{Dedication Time}
 Approximately 15 hours were dedicated to developing the System Monitor, mainly spent on finding out sensor malfunctioning given that the software implementation was simple and straightforward.
 
-\subsection{Challenges and Solutions}
+\subsubsection{Challenges and Solutions}
 \begin{itemize}
     \item \textbf{Hardware Challenges:} Malfunctioning sensors which drove us crazy.
     \item \textbf{Software Challenges:} Processing sensor data accurately, since this cheap sensors can provide really confusing data.
 \end{itemize}
 
-\subsection{Hardware diagram}
+\subsubsection{Hardware diagram}
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{../images/activity_monitor_scheme.png}
@@ -58,18 +58,18 @@ Approximately 15 hours were dedicated to developing the System Monitor, mainly s
     \label{fig:esp32_system_monitor}
 \end{figure}
 
-\subsubsection{Data Flow and Configuration}
+\paragraph{Data Flow and Configuration}
 
-\subsection{MQTT Tree Structure}
+\subsubsection{MQTT Tree Structure}
 The MQTT protocol in the presence and location project uses a structured approach to manage the data flow. Below is the outline of the MQTT topics and their functions:
 
-\subsubsection{MQTT Topics}
+\paragraph{MQTT Topics}
 \begin{itemize}
     \item \textbf{sensor1/distance:} This topic is used by the first ESP-01 module. It publishes the distance data measured by its connected ultrasonic sensor.
     \item \textbf{sensor2/distance:} Similar to the first, this topic is for the second ESP-01 module.
 \end{itemize}
 
-\subsubsection{Data Organization and Utilization}
+\paragraph{Data Organization and Utilization}
 The data sent to these topics include numerical values representing the measured distances. 
 
 \end{document}

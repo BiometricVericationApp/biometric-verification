@@ -1,8 +1,8 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Arch Linux) (preloaded format=xelatex 2023.6.7)  16 JAN 2024 14:49
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Arch Linux) (preloaded format=xelatex 2023.6.7)  16 JAN 2024 15:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**activity_monitor.tex presence.tex raspberry.tex user_data_collector.tex
+**activity_monitor.tex
 (./activity_monitor.tex
 LaTeX2e <2022-11-01> patch level 1
 L3 programming layer <2023-02-22>
@@ -93,10 +93,6 @@ Font mapping `tex-text.tec' for font `[lmroman12-regular]:mapping=tex-text;' no
 t found.
 Font mapping `tex-text.tec' for font `[lmroman12-bold]:mapping=tex-text;' not f
 ound.
-Font mapping `tex-text.tec' for font `[lmroman12-regular]:mapping=tex-text;' no
-t found.
-Font mapping `tex-text.tec' for font `[lmroman12-bold]:mapping=tex-text;' not f
-ound.
 Font mapping `tex-text.tec' for font `[lmroman10-bold]:mapping=tex-text;' not f
 ound.
 Font mapping `tex-text.tec' for font `[lmroman10-italic]:mapping=tex-text;' not
@@ -109,12 +105,12 @@ File: ../images/activity_monitor_scheme.png Graphic file (type bmp)
 <../images/activity_monitor_scheme.png>
  [3] [4] (./activity_monitor.aux) ) 
 Here is how much of TeX's memory you used:
- 976 strings out of 476683
- 18026 string characters out of 5809791
- 1851018 words of memory out of 5000000
- 21262 multiletter control sequences out of 15000+600000
- 512351 words of font info for 40 fonts, out of 8000000 for 9000
+ 972 strings out of 476683
+ 17924 string characters out of 5809791
+ 1852018 words of memory out of 5000000
+ 21260 multiletter control sequences out of 15000+600000
+ 512335 words of font info for 38 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 55i,5n,62p,424b,205s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 55i,5n,62p,382b,205s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on activity_monitor.pdf (4 pages).

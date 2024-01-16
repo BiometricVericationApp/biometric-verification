@@ -4,9 +4,9 @@
 
 \begin{document}
 
-\section{RaspberryPi}
+\subsection{RaspberryPi}
 
-\subsection{Objective and Functionality}
+\subsubsection{Objective and Functionality}
 The RaspberryPi is the backbone of the project, it serves as the MQTT broker and merges the collected data from both the Biometric Sensors and the camera it has attached to provide a prediction of who may the user interacting with system be, sending that final prediction to the Monitor System. Its responsibilites include:
 \begin{itemize}
     \item Subscribing to and processing biometric data from the ESP-01 module attached to biometric sensors via MQTT.
@@ -15,7 +15,7 @@ The RaspberryPi is the backbone of the project, it serves as the MQTT broker and
     \item Sending the final result to the 'rpi/prediction' topic so the System Monitor can show the result.
 \end{itemize}
 
-\subsection{Project Definition and Milestones}
+\subsubsection{Project Definition and Milestones}
 The development of the RaspberryPi system involved the following milestones:
 \begin{enumerate}
     \item Setting up an MQTT broker to handle all the IoT devices communications.
@@ -24,7 +24,7 @@ The development of the RaspberryPi system involved the following milestones:
     \item Training a classification tree to get a final prediction using both biometric data and neural network prediction.
 \end{enumerate}
 
-\subsection{Achieved milestones, execution order, priority, and dependencies}
+\subsubsection{Achieved milestones, execution order, priority, and dependencies}
 \begin{enumerate}
     \item \textbf{Milestone 1: Setting up an MQTT broker}
        - \textit{Priority:} High. Fundamental for all the data transmission.
@@ -52,14 +52,14 @@ The development of the RaspberryPi system involved the following milestones:
        - \textit{Execution Order:} Fourth, last step towards getting a prediction shown to the user.
 \end{enumerate}
 
-\subsection{Hardware setup}
+\subsubsection{Hardware setup}
 The hardware setup for the RaspberryPi comprises:
 \begin{itemize}
     \item A RaspberryPi 4 with WiFi capabilites.
     \item A logitech webcam with usb connection.
 \end{itemize}
 
-\subsection{Software Implementation}
+\subsubsection{Software Implementation}
 The software, written in python has the key functions:
 \begin{itemize}
     \item Recieving biometric data from 'sensor3/galvanic' and 'sensor3/heart' topics.
@@ -76,29 +76,29 @@ The operating system (RaspberriPi OS Lite) is responsible of connecting to WiFi 
 
 \textbf{\textit{NOTE}}: The data collection for training the classification tree has also been done on the RaspberryPi as well as the training itself, code for replicating this steps can be found on the project repository.
 
-\subsection{Testing}
+\subsubsection{Testing}
 Testing has been mainly focused on the machine learning aspect, since getting accurate results was non trivial. By generating artificial data (data augmentation) it was possible to finally achieve a more convincing accuracy. Regarding MQTT, setting up the broker was a very straight forward process with no trouble.
 
-\subsection{Dedication Time}
+\subsubsection{Dedication Time}
 Approximately 30 hours were dedicated to developing the RaspberryPi system, using most of the time on the machine learning aspect.
 
-\subsection{Challenges and Solutions}
+\subsubsection{Challenges and Solutions}
 \begin{itemize}
     \item \textbf{Hardware Challenges:} Collecting footage from the usb webcam.
     \item \textbf{Software Challenges:} Getting an accurate prediction from the model. Using a foundational model trained for object detection wasn't working very well for telling faces apart so the solution provided is to use a representative item for each member of the group which is what is placed in front of the camera, this way the neural network can tell us apart easily.
 \end{itemize}
 
-\subsection{Hardware and Software Integration}
+\subsubsection{Hardware and Software Integration}
 The only hardware used on this setup was a webcam connected through usb to the RaspberryPi.
 
-\subsection{MQTT Topics}
+\subsubsection{MQTT Topics}
 \begin{itemize}
     \item \textbf{sensor3/heart:} This is the topic used to collect heart rate biometric data.
     \item \textbf{sensor3/galvanic:} Provides galvanic resistance data, and together with the first topic, this two provide the full biometric data needed.
     \item \textbf{rpi/prediction:} Topic used to publish the result of the prediction.
 \end{itemize}
 
-\subsection{Conclusion}
+\subsubsection{Conclusion}
 The development on the RaspberryPi system was a very interesting experience, it was the first time working with machine learning for some of us and it was very challenging to get an accurate prediction, but after some research and testing it was possible to get a good result. The MQTT broker setup was very straight forward and it was easy to get it working.
 
 
