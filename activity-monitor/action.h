@@ -1,11 +1,16 @@
-#ifndef GLOBAL_DATA_
-#define GLOBAL_DATA_
+#ifndef ACTION_H_
+#define ACTION_H_
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/semphr.h>
-#include "presence.h"
 #include "lock.h"
+#include "timeout.h"
+
+/*
+ * file: action.h
+ * description: define which action should we print now to the screen
+ */
 
 enum LastAction {
     Heart,
@@ -13,40 +18,13 @@ enum LastAction {
     None,
 };
 
-int counter = 0;
 LastAction lastAction = None;
 
 SemaphoreHandle_t actionSemaphore;
-SemaphoreHandle_t counterSemaphore;
 
-void setUpGlobalData() {
+void setUpAction() {
     actionSemaphore = xSemaphoreCreateMutex();
-    counterSemaphore = xSemaphoreCreateMutex();
 }
-
-int getNumberOfNoPackages() {
-    int c;
-    WITH_SEMAPHORE(counterSemaphore,{
-      c = counter;
-    });
-    return c;
-}
-
-void updateNumberOfNoPackages() {
-  WITH_SEMAPHORE(counterSemaphore, {
-    counter += 1;
-  });
-}
-
-void resetNumberOfPackages() {
-  WITH_SEMAPHORE(counterSemaphore, {
-    counter = 0;
-  });
-}
-
-/*
- * Action
- */
 
 void updateAction(LastAction action) {
   WITH_SEMAPHORE(actionSemaphore, {
@@ -63,4 +41,4 @@ LastAction getLastAction() {
   return action;
 }
 
-#endif // GLOBAL_DATA_
+#endif // ACTION_H_

@@ -7,7 +7,7 @@
 
 #include <Arduino.h>
 #include "lock.h"
-#include "global-data.h"
+#include "action.h"
 
 #define DETECTION_RANGE 50.0
 #define TOLERANCE 5.0

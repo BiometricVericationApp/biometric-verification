@@ -6,11 +6,11 @@
 #include <freertos/semphr.h>
 #include "common.h"
 #include "common_ultrasound.h"
-
 #include "leds.h"
 #include "presence.h"
 #include "lcd.h"
-#include "global-data.h"
+#include "timeout.h"
+#include "action.h"
 #include "user-data-collector.h"
 
 #define THRESHOLD 4
@@ -22,18 +22,19 @@ void MQTTTask(void *pvParameters);
 void reconnectMQTT();
 void mqttCallback(char* topic, byte* payload, unsigned int length);
 void lcdPrint(String message, int line);
-void updateDevicesTask(void *pvParameters);
+void executeCurrentAction(void *pvParameters);
 
 void setup() {
   Serial.begin(115200);
   setUpLcd();
   setUpLeds();
-  setUpGlobalData();
+  setUpAction();
+  setUpTimeout();
   setUpDataCollector();
   setUpPresence();
   xTaskCreate(WiFiTask, "WiFi Task", 10000, NULL, 1, NULL);
   xTaskCreate(MQTTTask, "MQTT Task", 10000, NULL, 1, NULL);
-  xTaskCreate(updateDevicesTask, "Update Devices Task", 10000, NULL, 1, NULL);
+  xTaskCreate(executeCurrentAction, "Execute a current action", 10000, NULL, 1, NULL);
   xTaskCreate(markAsNonUpdated, "Mark as None", 10000, NULL, 1, NULL);
 }
 
@@ -128,7 +129,7 @@ void updateA() {
 }
 
 
-void updateDevicesTask(void *pvParameters) {
+void executeCurrentAction(void *pvParameters) {
   for (;;) {
     LastAction action = getLastAction();
     if (action == Heart) {
