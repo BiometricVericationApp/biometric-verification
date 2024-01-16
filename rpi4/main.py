@@ -29,20 +29,14 @@ class Predict:
         update_func = self.update_heart if msg.topic == HEART_TOPIC else self.update_galvanic
         update_func(self.get_message_from_bytes(msg.payload))
         if self.should_take_pic():
-            print("About to inference in cam")
             self.label, confidence = cam_inference()
             self.confidence = str(confidence)
-            print(f"Got {self.label} prediction with ${self.confidence}")
             prediction: str = ""
             if self.label == NO_LABEL:
-                print("No label detected")
                 prediction = "Unknown"
             else:
-                print("Detected someone")
-                print("Calling model...")
                 classifier = DecisionTreeClassifier()
                 sample = self.get_sample()
-                print(sample)
                 prediction = classifier.predict(sample)[0]
             client.publish("rpi/prediction", prediction)
             self.reset_atributes()

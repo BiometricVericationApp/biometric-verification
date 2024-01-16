@@ -1,0 +1,18 @@
+[Unit] 
+Description=Mosquitto MQTT Broker
+After=network.target
+
+[Service]
+ExecStart=/home/pi/PyML/venv/bin/python3 /home/pi/PyML/main.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+
+
+
+

@@ -1,0 +1,8 @@
+joblib
+pandas
+scikit-learn
+six
+pyaudio
+opencv-contrib-python
+edge_impulse_linux
+paho-mqtt

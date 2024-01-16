@@ -1,0 +1,10 @@
+[Unit]
+Description=Mosquitto MQTT Broker
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/mosquitto -c /home/pi/mosquitto.conf
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
