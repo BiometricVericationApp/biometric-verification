@@ -12,7 +12,7 @@ The presence and location is a set of two devices each with an ultrasonic sensor
 \subsection{Project Definition and Milestones}
 The development of the presence and location system just involves establishing an MQTT connection with the broker to send the collected data from the ultrasonic sensors.
 
-\subsection{Milestones Execution Order, Priority, and Dependencies}
+\subsection{Achieved milestones, execution order, priority, and dependencies}
 \begin{enumerate}
     \item \textbf{Milestone 1: Establishing MQTT Communication}
        - \textit{Priority:} High. Fundamental for data transmission.
@@ -25,7 +25,7 @@ The development of the presence and location system just involves establishing a
        - \textit{Execution Order:} Second, building upon established communication.
 \end{enumerate}
 
-\subsection{Hardware Development}
+\subsection{Hardware setup}
 The hardware setup for the location and presence comprises:
 \begin{itemize}
     \item Two ESP-01 modules.
@@ -41,17 +41,8 @@ The software, written in arduino programming language, has the following key fun
     \item Send the resulting data to the corresponding topic (sensor1/distance or sensor2/distance)
 \end{itemize}
 
-\subsection{Interaction with Other Components}
-The presence and distance system is based on an interaction between ESP01 modules and ultrasonic sensors to achieve effective communication of the user distance and presence to both the System Monitor (for displaying the data on the screen) and the RaspberryPi (for making it possible to predit who is the user).
-
-\subsection{Testing}
-Testing ensured accurate sensor data transmission via MQTT. An iterative approach was applied to refine the system's performance.
-
 \subsection{Dedication Time}
 Approximately 15 hours were dedicated to developing the System Monitor, mainly spent on finding out sensor malfunctioning given that the software implementation was simple and straightforward.
-
-\subsection{User Story}
-As a user approaches, the System Monitor recieves data about their presence, lighting up the LED bar and displaying their approximate location (left, right, or center) on the LCD screen, providing real-time feedback.
 
 \subsection{Challenges and Solutions}
 \begin{itemize}
@@ -66,15 +57,6 @@ As a user approaches, the System Monitor recieves data about their presence, lig
     \caption{ESP32 with LED bar and LCD display connected on a breadboard.}
     \label{fig:esp32_system_monitor}
 \end{figure}
-
-\subsection{Microcontroller Interaction Protocol}
-The location and presence system involves a simple communication in one direction, basically the ESP01 have to send the collected data to their corresponding topics. The communication structure is the following:
-
-\subsubsection{Communication Protocol}
-The project utilizes the MQTT (Message Queuing Telemetry Transport) protocol, a lightweight and efficient messaging protocol ideal for IoT applications. This protocol is chosen for its low bandwidth usage and its ability to provide reliable communication over WiFi.
-
-\subsubsection{WiFi Configuration}
-Each microcontroller in the system is configured to connect to a WiFi network, enabling them to send data over the network. The network credentials (SSID and password) are programmed into the microcontrollers.
 
 \subsubsection{Data Flow and Configuration}
 

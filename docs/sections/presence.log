@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Arch Linux) (preloaded format=xelatex 2023.6.7)  16 JAN 2024 11:50
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Arch Linux) (preloaded format=xelatex 2023.6.7)  16 JAN 2024 12:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -103,21 +103,21 @@ Font mapping `tex-text.tec' for font `[lmroman10-italic]:mapping=tex-text;' not
  [1
 
 ]
-Overfull \hbox (1.56036pt too wide) in paragraph at lines 59--60
+Overfull \hbox (1.56036pt too wide) in paragraph at lines 50--51
 []\TU/lmr/bx/n/10 Software Challenges: \TU/lmr/m/n/10 Processing sensor data ac
 curately, since this cheap
  []
 
 File: ../images/activity_monitor_scheme.png Graphic file (type bmp)
 <../images/activity_monitor_scheme.png>
-[2] [3] (./presence.aux) ) 
+[2] (./presence.aux) ) 
 Here is how much of TeX's memory you used:
  972 strings out of 476683
  17877 string characters out of 5809791
- 1851018 words of memory out of 5000000
+ 1850018 words of memory out of 5000000
  21260 multiletter control sequences out of 15000+600000
  512343 words of font info for 39 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 55i,5n,62p,346b,205s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 55i,5n,62p,297b,205s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on presence.pdf (3 pages).
+Output written on presence.pdf (2 pages).
