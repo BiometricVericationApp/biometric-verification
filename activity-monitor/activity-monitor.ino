@@ -115,10 +115,10 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 
   if (xSemaphoreTake(xSemaphoreInfo, portMAX_DELAY)) {
     if (String(topic) == TOPIC_DISTANCE_SENSOR_1) {
-      info.distance.distance.leftDistance = message.toFloat();
+      info.distance.current.leftDistance = message.toFloat();
       info.lastAction = Distance;
     } else if (String(topic) == TOPIC_DISTANCE_SENSOR_2) {
-      info.distance.distance.rightDistance = message.toFloat();
+      info.distance.current.rightDistance = message.toFloat();
       info.lastAction = Distance;
     } else if (String(topic) == TOPIC_SENSOR_3_DATA) {
       if (message.startsWith("Sensor Gsr: ")) {
@@ -145,9 +145,10 @@ void LCDDisplayTask(void *pvParameters) {
           info.lastAction = Distance;
         } else if (info.lastAction == Distance) {
           DistanceResult result = checkForPresenceAndDirection(info.distance);
-          info.distance.lastResult = result;
+          info.distance.last = result;
           if (result.hasData) {
             lcdPrint(result.direction, 1);
+            lcdPrint("CM: " + String(result.proximity), 2);
           }
         } else {
           lcdPrint("Nothing Received...", 1);

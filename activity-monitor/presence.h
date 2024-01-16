@@ -26,14 +26,14 @@ struct DistanceResult {
 };
 
 struct DistanceInfo {
-    Distance distance;
-    DistanceResult lastResult;
+    Distance current;
+    DistanceResult last;
 };
 
 
 DistanceResult checkForPresenceAndDirection(DistanceInfo info) {
-    float leftDistance = info.distance.leftDistance;
-    float rightDistance = info.distance.rightDistance;
+    float leftDistance = info.current.leftDistance;
+    float rightDistance = info.current.rightDistance;
     float proximity;
     bool isLeft = false, isRight = false, isCenter = false;
     if (rightDistance <= DETECTION_RANGE || leftDistance <= DETECTION_RANGE) {
@@ -50,8 +50,8 @@ DistanceResult checkForPresenceAndDirection(DistanceInfo info) {
             isRight = true;
         }
 
-        if (abs(proximity - info.lastResult.proximity) <= NOISE_THRESHOLD) {
-            proximity = info.lastResult.proximity;
+        if (abs(proximity - info.last.proximity) <= NOISE_THRESHOLD) {
+            proximity = info.last.proximity;
         }
 
         String direction = isCenter ? CENTER_STR : (isLeft ? LEFT_STR : RIGHT_STR);
