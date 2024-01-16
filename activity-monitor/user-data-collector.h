@@ -1,7 +1,7 @@
 #ifndef USER_DATA_COLLECTOR_
 #define USER_DATA_COLLECTOR_
 
-#include "lock.h"
+#include "common/lock.h"
 #include "timeout.h"
 
 SemaphoreHandle_t bpmSemaphore;

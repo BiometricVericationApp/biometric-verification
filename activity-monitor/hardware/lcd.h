@@ -3,7 +3,7 @@
 #include <freertos/semphr.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
-#include "../lock.h"
+#include "../common/lock.h"
 
 /*
  * name: lcd.h

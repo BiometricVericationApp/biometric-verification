@@ -4,14 +4,14 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/semphr.h>
-#include "common.h"
-#include "common_ultrasound.h"
 #include "presence.h"
 #include "timeout.h"
 #include "user-data-collector.h"
 #include "hardware/wifi.h"
 #include "hardware/leds.h"
 #include "hardware/lcd.h"
+#include "common/common.h"
+#include "common/common_ultrasound.h"
 
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);

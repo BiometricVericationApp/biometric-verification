@@ -4,7 +4,7 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/semphr.h>
-#include "lock.h"
+#include "common/lock.h"
 
 #define THRESHOLD 4
 

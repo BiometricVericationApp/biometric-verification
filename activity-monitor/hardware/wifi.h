@@ -1,7 +1,7 @@
 #ifndef WIFI_H_
 #define WIFI_H_
 
-#include "common.h"
+#include "../common/common.h"
 
 void WiFiTask(void *pvParameters) {
   for (;;) {
