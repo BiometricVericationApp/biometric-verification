@@ -8,12 +8,10 @@
 #include "common_ultrasound.h"
 #include "leds.h"
 #include "presence.h"
+#include "lcd.h"
 
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
-LiquidCrystal_I2C lcd(0x27, 16, 2); 
-
-SemaphoreHandle_t xSemaphoreLCD;
 
 enum LastAction {
     Heart,
@@ -44,14 +42,12 @@ void LCDDisplayTask(void *pvParameters);
 
 void setup() {
   Serial.begin(115200);
-  lcd.init();
-  lcd.backlight();
-  xSemaphoreLCD = xSemaphoreCreateMutex(); 
+  setUpLcd();
+  setUpLeds();
   xSemaphoreInfo = xSemaphoreCreateMutex(); 
   xTaskCreate(WiFiTask, "WiFi Task", 10000, NULL, 1, NULL);
   xTaskCreate(MQTTTask, "MQTT Task", 10000, NULL, 1, NULL);
   xTaskCreate(LCDDisplayTask, "LCD Display Task", 10000, NULL, 1, NULL);
-  setUpLeds();
 }
 
 
@@ -140,35 +136,21 @@ void LCDDisplayTask(void *pvParameters) {
   for (;;) {
     if (xSemaphoreTake(xSemaphoreInfo, portMAX_DELAY)) {
         if (info.lastAction == Heart) {
-          lcdPrint("BPM: " + String(info.heart.bpm),1);
-          lcdPrint("GSR: " + String(info.heart.gsr), 2); 
+          lcdPrint("BPM: " + String(info.heart.bpm), Up);
+          lcdPrint("GSR: " + String(info.heart.gsr), Down); 
           info.lastAction = Distance;
         } else if (info.lastAction == Distance) {
           DistanceResult result = checkForPresenceAndDirection(info.distance);
           info.distance.last = result;
           if (result.hasData) {
-            lcdPrint(result.direction, 1);
-            lcdPrint("CM: " + String(result.proximity), 2);
+            lcdPrint(result.direction, Up);
+            lcdPrint("CM: " + String(result.proximity), Down);
           }
         } else {
-          lcdPrint("Nothing Received...", 1);
+          lcdPrint("Nothing Received...");
         }
         xSemaphoreGive(xSemaphoreInfo);
     }
     vTaskDelay(2000 / portTICK_PERIOD_MS);
   }
 }
-
-
-void lcdPrint(String message, int line) {
-  if (xSemaphoreTake(xSemaphoreLCD, portMAX_DELAY)) {
-    lcd.setCursor(0, line - 1);
-    lcd.print(message);
-    for (int i = message.length(); i < 16; i++) {
-      lcd.print(" ");
-    }
-    xSemaphoreGive(xSemaphoreLCD);
-    delay(100); 
-  }
-}
-
