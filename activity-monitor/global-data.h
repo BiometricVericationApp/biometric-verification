@@ -66,6 +66,9 @@ void resetNumberOfPackages() {
   xSemaphoreGive(counterSemaphore);
 }
 
+/*
+ * Action
+ */
 
 void updateAction(LastAction action) {
   if (xSemaphoreTake(actionSemaphore, portMAX_DELAY)) {
@@ -84,11 +87,14 @@ LastAction getLastAction() {
   return action;
 }
 
+/*
+ * Distances
+ */
+
 
 void updateLeftDistance(float newDistance) {
   if (xSemaphoreTake(leftDistanceSemaphore, portMAX_DELAY)) {
       info.distance.current.leftDistance = newDistance;
-      updateAction(Distance);
   }
   xSemaphoreGive(leftDistanceSemaphore);
 }
@@ -96,9 +102,17 @@ void updateLeftDistance(float newDistance) {
 void updateRightDistance(float newDistance) {
   if (xSemaphoreTake(rightDistanceSemaphore, portMAX_DELAY)) {
       info.distance.current.rightDistance = newDistance;
-      updateAction(Distance);
   }
   xSemaphoreGive(rightDistanceSemaphore);
+}
+
+
+void updateLastDistance(DistanceResult result) {
+  if (xSemaphoreTake(lastDistanceSemaphore, portMAX_DELAY)) {
+      info.distance.last = result;
+      updateAction(Distance);
+  }
+  xSemaphoreGive(lastDistanceSemaphore);
 }
 
 struct DistanceInfo getDistance() {
@@ -110,6 +124,11 @@ struct DistanceInfo getDistance() {
     xSemaphoreGive(rightDistanceSemaphore);
     return dist;
 }
+
+
+/*
+ * BPM
+ */
 
 void updateBpm(float bpm) {
   if (xSemaphoreTake(bpmSemaphore, portMAX_DELAY)) {
@@ -128,6 +147,10 @@ float getBpm() {
   return bpm;
 }
 
+/*
+ * GSR
+ */
+
 void updateGsr(float gsr) {
   if (xSemaphoreTake(gsrSemaphore, portMAX_DELAY)) {
       info.heart.gsr = gsr;
@@ -143,11 +166,4 @@ float getGsr() {
   }
   xSemaphoreGive(gsrSemaphore);
   return gsr;
-}
-
-void updateLastDistance(DistanceResult result) {
-  if (xSemaphoreTake(lastDistanceSemaphore, portMAX_DELAY)) {
-      info.distance.last = result;
-  }
-  xSemaphoreGive(lastDistanceSemaphore);
 }

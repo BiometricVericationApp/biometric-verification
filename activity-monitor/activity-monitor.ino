@@ -98,9 +98,11 @@ void executeActionFromTopic(char *topic, String message) {
   if (String(topic) == TOPIC_DISTANCE_SENSOR_1) {
     float leftDist = message.toFloat();
     updateLeftDistance(leftDist);
+    updateA();
   } else if (String(topic) == TOPIC_DISTANCE_SENSOR_2) {
     float rightDist = message.toFloat();
     updateRightDistance(rightDist);
+    updateA();
   } else if (String(topic) == TOPIC_SENSOR_3_DATA) {
     if (message.startsWith("Sensor Gsr: ")) {
       float gsr = message.substring(12).toFloat();
@@ -110,6 +112,15 @@ void executeActionFromTopic(char *topic, String message) {
       updateBpm(bpm);
     }
   }
+}
+
+
+void updateA() {
+    struct DistanceInfo dist = getDistance();
+    DistanceResult result = checkForPresenceAndDirection(dist);
+    if (result.hasData) {
+        updateLastDistance(result);
+    }
 }
 
 
@@ -135,12 +146,10 @@ void executeActionHeart() {
 
 void executeActionDistance() {
     struct DistanceInfo dist = getDistance();
-    DistanceResult result = checkForPresenceAndDirection(dist);
-    updateLastDistance(result);
-    if (result.hasData) {
-        lcdPrint(result.direction, Up);
-        lcdPrint("CM: " + String(result.proximity), Down);
-        printDistanceInLeds(result.proximity);
+    if (dist.last.hasData) {
+        lcdPrint(dist.last.direction, Up);
+        lcdPrint("CM: " + String(dist.last.proximity), Down);
+        printDistanceInLeds(dist.last.proximity);
     }
 }
 
