@@ -7,7 +7,6 @@ this article.
 \subsubsection{Hardware you need:}\label{hardware-you-need}
 
 \begin{itemize}
-\tightlist
 \item
   A wifi adapter network that supports AP virtual interface (we used an
   Alfa AWUS036ACH-C, but some integrated wifi cards can handle
@@ -19,7 +18,6 @@ this article.
 \subsubsection{Software you need:}\label{software-you-need}
 
 \begin{itemize}
-\tightlist
 \item
   \href{https://github.com/lakinduakash/linux-wifi-hotspot}{Linux Wifi
   Hotspot}
@@ -29,7 +27,6 @@ this article.
 steps:}\label{brief-overview-of-the-steps}
 
 \begin{itemize}
-\tightlist
 \item
   Patch the create\_ap program that comes with Linux Wifi Hotspot for
   enabling an static IP for the raspberry pi.
@@ -71,20 +68,16 @@ So, we had to patch the \textbf{create\_ap} script for adding our custom
 rule! Yay! First of all find where is the \textbf{create\_ap} script
 living on your computer:
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\ExtensionTok{$}\NormalTok{ whereis create\_ap}
-\CommentTok{\# /usr/bin/create\_ap if you\textquotesingle{}re in archlinux}
-\end{Highlighting}
-\end{Shaded}
+\begin{verbatim}
+$ whereis create_ap
+# /usr/bin/create_ap if you're using archlinux
+\end{verbatim}
 
 Then, patch it with:
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\ExtensionTok{$}\NormalTok{ patch /usr/bin/create\_ap }\OperatorTok{\textless{}}\NormalTok{ create\_ap\_raspberry\_pi.patch}
-\end{Highlighting}
-\end{Shaded}
+\begin{verbatim}
+$ patch /usr/bin/create_ap < create_ap_raspberry_pi.patch
+\end{verbatim}
 
 Be aware that this will add a custom rule for the dnsmasq program, which
 is:
@@ -95,7 +88,7 @@ dhcp-host=e4:5f:01:f2:b4:df,192.168.33.213
 
 If you don't have the same raspberry we're using, the raspberry mac
 address will change, this means you will have to tweak this patch file.
-If you're following our \href{}{network diagram} you don't have to
+If you're following our network diagram you don't have to
 change the ip address.
 
 \paragraph{Change the interfaces of the config
@@ -104,14 +97,13 @@ file}\label{change-the-interfaces-of-the-config-file}
 Every linux distribution names his network devices differently (and
 everyone has different devices), so execute the following command:
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\ExtensionTok{$}\NormalTok{ ip a}
-\ExtensionTok{....}
-\ExtensionTok{17:}\NormalTok{ wlp0s20f0u2: }\OperatorTok{\textless{}}\NormalTok{BROADCAST,MULTICAST,UP,LOWER\_UP}\OperatorTok{\textgreater{}}\NormalTok{ mtu 2312 qdisc mq state UP group default qlen 1000}
-\ExtensionTok{18:}\NormalTok{ enp0s20f0u6: }\OperatorTok{\textless{}}\NormalTok{BROADCAST,MULTICAST,UP,LOWER\_UP}\OperatorTok{\textgreater{}}\NormalTok{ mtu 1500 qdisc fq\_codel state UP group default qlen 1000}
-\end{Highlighting}
-\end{Shaded}
+\begin{verbatim}
+$ ip a
+....
+17: wlp0s20f0u2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 2312 qdisc mq state UP group default qlen 1000
+18: enp0s20f0u6: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+
+\end{verbatim}
 
 In my case I see that the Alfa Wifi Card is named wlp0s20f0u2, and the
 ethernet connection to the internet is named enp0s20f0u6, so change the
@@ -127,11 +119,9 @@ INTERNET_IFACE=enp0s20f0u6
 
 Everything is ready now! Execute:
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\ExtensionTok{$}\NormalTok{ sudo create\_ap }\AttributeTok{{-}{-}config}\NormalTok{ ap.conf}
-\end{Highlighting}
-\end{Shaded}
+\begin{verbatim}
+$ sudo create_ap --config ap.conf
+\end{verbatim}
 
 If any problem occurs is 99\% problem of your wifi card. See the
 requirements on the hardware section.

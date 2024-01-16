@@ -1,6 +1,10 @@
 \documentclass{article} 
 \usepackage[utf8]{inputenc} 
 \usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{framed}
+\definecolor{shadecolor}{rgb}{1,0,0}
 \newcommand{\figautorefname}{figure}
 \newcommand{\secautorefname}{section}
 \newcommand{\subsecautorefname}{subsection}
@@ -12,8 +16,13 @@
 \begin{document}
 
 \maketitle
+\newpage
+\tableofcontents
+\listoffigures
+\newpage
 
-\section{Introduction} The Biometric Authentication System is a prove of concept of an IoT
+\section{Introduction}
+The Biometric Authentication System is a prove of concept of an IoT
 solution designed to provide security authentication through biometric verification, including
 galvanic skin response, heart rate analysis, and facial recognition. This
 project's primary objective is to establish a user-friendly system
@@ -76,6 +85,7 @@ Additionally, implementing machine learning models with more extensive datasets
 can offer continued improvement in recognition accuracy and pave the way for
 personalized user experiences.
 
+\newpage
 \section{Technical Documentation}
 For a in depth technical documentation of the system, detailed 
 instructions on how to setup the system and how to use it, please refer to the following specifications
@@ -83,7 +93,4 @@ instructions on how to setup the system and how to use it, please refer to the f
 
 \input{../technical-docs/rpi.tex}
 \input{../technical-docs/linux-router.tex}
-% \input{../technical-docs/activity-monitor.tex}
-% \input{../technical-docs/user-data-collection.tex}
-% \input{../technical-docs/presence.tex}
 \end{document}

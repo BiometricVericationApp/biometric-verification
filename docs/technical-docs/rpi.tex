@@ -1,18 +1,15 @@
-\subsection{Raspberry Pi 4
-Configuration}\label{raspberry-pi-4-configuration}
+\subsection{Raspberry Pi 4 Configuration}\label{raspberry-pi-4-configuration}
 
 We use the raspberry pi 4 as a: - MQTT Broker - EdgeImpulse node for
 running the IA for detecting objects.
 
-\subsubsection{Configure the raspberry
-pi}\label{configure-the-raspberry-pi}
+\subsubsection{Configure the raspberry pi}\label{configure-the-raspberry-pi}
 
 You can configure your raspberry pi liunx image with
 \href{https://github.com/raspberrypi/rpi-imager}{rpi imager}, which
 comes pretty handy since you can:
 
 \begin{itemize}
-\tightlist
 \item
   Enable wifi with an SSID and password.
 \item
@@ -29,24 +26,20 @@ cable or screen for configuring it.
 
 Install mosquitto with:
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# We\textquotesingle{}re using the raspbian image for the rpi}
-\ExtensionTok{$}\NormalTok{ sudo apt{-}get update }\KeywordTok{\&\&} \FunctionTok{sudo}\NormalTok{ apt{-}get upgrade}
-\ExtensionTok{$}\NormalTok{ sudo apt{-}get install mosquitto}
-\end{Highlighting}
-\end{Shaded}
+\begin{verbatim}
+# We're using the raspbian lite image for the rpi
+$ sudo apt-get update && sudo apt-get upgrade
+$ sudo apt-get install mosquitto
+\end{verbatim}
 
 \subsubsection{Run mosquitto broker}\label{run-mosquitto-broker}
 
 Once mosquitto is installed, copy our configuration file and run it
 with:
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\ExtensionTok{$}\NormalTok{ mosquitto }\AttributeTok{{-}c}\NormalTok{ mosquitto.conf }\AttributeTok{{-}v}
-\end{Highlighting}
-\end{Shaded}
+\begin{verbatim}
+$ mosquitto -c mosquitto.conf -v
+\end{verbatim}
 
 It will serve the mqtt server on port 1883.
 
