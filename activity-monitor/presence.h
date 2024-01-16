@@ -30,19 +30,22 @@ struct DistanceInfo {
     DistanceResult last;
 };
 
+bool inRange(float distance) {
+    return distance > 0.0 && distance <= DETECTION_RANGE;
+}
 
 DistanceResult checkForPresenceAndDirection(DistanceInfo info) {
     float leftDistance = info.current.leftDistance;
     float rightDistance = info.current.rightDistance;
     float proximity;
     bool isLeft = false, isRight = false, isCenter = false;
-    if (rightDistance <= DETECTION_RANGE || leftDistance <= DETECTION_RANGE) {
-        if (rightDistance <= DETECTION_RANGE && leftDistance <= DETECTION_RANGE) {
+    if (inRange(leftDistance) || inRange(rightDistance)) {
+        if (inRange(leftDistance) && inRange(rightDistance)) {
             isCenter = abs(rightDistance - leftDistance) <= TOLERANCE;
             isLeft = !isCenter && rightDistance < leftDistance;
             isRight = !isCenter && leftDistance < rightDistance;
             proximity = (rightDistance + leftDistance) / 2;
-        } else if (leftDistance <= DETECTION_RANGE){
+        } else if (inRange(leftDistance)){
             proximity = leftDistance;
             isLeft = true;
         } else {
