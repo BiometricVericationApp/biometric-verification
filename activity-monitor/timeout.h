@@ -51,10 +51,6 @@ static void updateNumberOfNoPackages() {
 }
 
 
-void setUpAction() {
-    actionSemaphore = xSemaphoreCreateMutex();
-}
-
 void updateAction(LastAction action) {
   WITH_SEMAPHORE(actionSemaphore, {
     lastAction = action;
@@ -82,6 +78,7 @@ void markAsNonUpdated(void *pvParameters) {
 }
 
 void setUpTimeout() {
+    actionSemaphore = xSemaphoreCreateMutex();
     counterSemaphore = xSemaphoreCreateMutex();
     xTaskCreate(markAsNonUpdated, "Mark as None", 10000, NULL, 0, NULL);
 }

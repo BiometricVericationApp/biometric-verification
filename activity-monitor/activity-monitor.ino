@@ -30,7 +30,6 @@ void setup() {
   setUpWifi();
   
   /* SetUp Timeouts for showing the "No Data" screen */
-  setUpAction();
   setUpTimeout();
 
   // Set Up integrations (data structures for each integration)
@@ -87,25 +86,25 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   for (unsigned int i = 0; i < length; i++) {
     message += (char)payload[i];
   }
-  executeActionFromTopic(topic, message);
+  executeActionFromTopic(String(topic), message);
 }
 
-void executeActionFromTopic(char *topic, String message) {
-  if (String(topic) == TOPIC_DISTANCE_SENSOR_1) {
+void executeActionFromTopic(String topic, String message) {
+  if (topic == TOPIC_DISTANCE_SENSOR_1) {
     float leftDist = message.toFloat();
     updateLeftDistance(leftDist);
     updateA();
-  } else if (String(topic) == TOPIC_DISTANCE_SENSOR_2) {
+  } else if (topic == TOPIC_DISTANCE_SENSOR_2) {
     float rightDist = message.toFloat();
     updateRightDistance(rightDist);
     updateA();
-  } else if (String(topic) == TOPIC_HEART) {
+  } else if (topic == TOPIC_HEART) {
     float bpm = message.toFloat();
     updateBpm(bpm);
-  } else if (String(topic) == TOPIC_GALVANIC) {
+  } else if (topic == TOPIC_GALVANIC) {
     float gsr = message.toFloat();
     updateGsr(gsr);
-  } else if (String(topic) == TOPIC_RPI) {
+  } else if (topic == TOPIC_RPI) {
     updateName(message);
   }
 }
