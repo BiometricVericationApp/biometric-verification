@@ -1,1 +1,1 @@
-../../common/common.h
+../common/common.h

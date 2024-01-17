@@ -12,14 +12,14 @@
 #include "hardware/leds.h"
 #include "hardware/lcd.h"
 #include "common/common.h"
-#include "common/common_ultrasound.h"
 
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
+
 void MQTTTask(void *pvParameters);
 void reconnectMQTT();
 void mqttCallback(char* topic, byte* payload, unsigned int length);
-void executeCurrentAction(void *pvParameters);
+void showCurrentAction(void *pvParameters);
 
 void setup() {
   Serial.begin(115200);
@@ -39,15 +39,12 @@ void setup() {
 
   // SetUp MQTT Receivers
   xTaskCreate(MQTTTask, "MQTT Task", 10000, NULL, 4, NULL);
-  xTaskCreate(executeCurrentAction, "Execute a current action", 10000, NULL, 6, NULL);
+  xTaskCreate(showCurrentAction, "Execute a current action", 10000, NULL, 6, NULL);
 }
 
 
 void loop() {}
 
-/*
-    MQTT
-*/
 
 void MQTTTask(void *pvParameters) {
   mqttClient.setServer(IP_MQTT_BROKER, PORT_MQTT_BROKER);
@@ -93,11 +90,11 @@ void executeActionFromTopic(String topic, String message) {
   if (topic == TOPIC_DISTANCE_SENSOR_1) {
     float leftDist = message.toFloat();
     updateLeftDistance(leftDist);
-    updateA();
+    updateLastDistance();
   } else if (topic == TOPIC_DISTANCE_SENSOR_2) {
     float rightDist = message.toFloat();
     updateRightDistance(rightDist);
-    updateA();
+    updateLastDistance();
   } else if (topic == TOPIC_HEART) {
     float bpm = message.toFloat();
     updateBpm(bpm);
@@ -110,7 +107,7 @@ void executeActionFromTopic(String topic, String message) {
 }
 
 
-void updateA() {
+void updateLastDistance() {
     struct DistanceInfo dist = getDistance();
     DistanceResult result = checkForPresenceAndDirection(dist);
     if (result.hasData) {
@@ -119,17 +116,15 @@ void updateA() {
 }
 
 
-void executeCurrentAction(void *pvParameters) {
+void showCurrentAction(void *pvParameters) {
   for (;;) {
     LastAction action = getLastAction();
     if (action == Heart) {
-        executeActionHeart();
+        showActionHeart();
     } else if (action == Distance) {
-        executeActionDistance();
+        showActionDistance();
     } else if (action == None) {
-        int x = getNumberOfNoPackages();
-        lcdPrint("No Data: " + String(x));
-        turnOffLeds();
+        showNoData();
     } else if (action == Name) {
         String name = getName();
         lcdPrint("Is: " + name);
@@ -138,18 +133,24 @@ void executeCurrentAction(void *pvParameters) {
   }
 }
 
-void executeActionHeart() {
+void showActionHeart() {
     lcdPrint("BPM: " + String(getBpm()), Up);
     lcdPrint("GSR: " + String(getGsr()), Down); 
 }
 
-void executeActionDistance() {
+void showActionDistance() {
     struct DistanceInfo dist = getDistance();
     if (dist.last.hasData) {
         lcdPrint(dist.last.direction, Up);
         lcdPrint("CM: " + String(dist.last.proximity), Down);
         printDistanceInLeds(dist.last.proximity);
     }
+}
+
+void showNoData() {
+    int x = getNumberOfNoPackages();
+    lcdPrint("No Data: " + String(x));
+    turnOffLeds();
 }
 
 void printDistanceInLeds(float proximity) {
