@@ -20,6 +20,7 @@
 enum LastAction {
     Heart,
     Distance,
+    Name,
     None,
 };
 int counter = 0;
@@ -82,7 +83,7 @@ void markAsNonUpdated(void *pvParameters) {
 
 void setUpTimeout() {
     counterSemaphore = xSemaphoreCreateMutex();
-    xTaskCreate(markAsNonUpdated, "Mark as None", 10000, NULL, 1, NULL);
+    xTaskCreate(markAsNonUpdated, "Mark as None", 10000, NULL, 0, NULL);
 }
 
 #endif // TIMEOUT_H_

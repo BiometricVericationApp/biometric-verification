@@ -1,3 +1,6 @@
+#ifndef LEDS_H_
+#define LEDS_H_
+
 #include <Arduino.h>
 /*
  * name: leds.h
@@ -29,3 +32,5 @@ void turnOffLeds() {
     digitalWrite(LED_PINS[i], LOW);
   }
 }
+
+#endif // LEDS_H_

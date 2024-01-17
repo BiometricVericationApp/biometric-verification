@@ -1,3 +1,5 @@
+#ifndef LCD_H_
+#define LCD_H_
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 #include <freertos/semphr.h>
@@ -32,10 +34,11 @@ void lcdPrint(String message, ScreenLine line) {
       lcd.print(" ");
     }
   });
-  delay(100); 
 }
 
 void lcdPrint(String message) {
     lcdPrint(message, Up);
     lcdPrint("", Down);
 }
+
+#endif // LCD_H_

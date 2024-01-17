@@ -7,6 +7,7 @@
 #include "timeout.h"
 #include "integrations/user-data-collector.h"
 #include "integrations/presence.h"
+#include "integrations/rpi.h"
 #include "hardware/wifi.h"
 #include "hardware/leds.h"
 #include "hardware/lcd.h"
@@ -18,24 +19,28 @@ PubSubClient mqttClient(espClient);
 void MQTTTask(void *pvParameters);
 void reconnectMQTT();
 void mqttCallback(char* topic, byte* payload, unsigned int length);
-void lcdPrint(String message, int line);
 void executeCurrentAction(void *pvParameters);
 
 void setup() {
   Serial.begin(115200);
 
   /* SetUp Hardware Components */
-  setUpWifi();
   setUpLcd();
   setUpLeds();
+  setUpWifi();
   
-  /* SetUp Software (for locks, initial vars, etc) */
+  /* SetUp Timeouts for showing the "No Data" screen */
   setUpAction();
   setUpTimeout();
+
+  // Set Up integrations (data structures for each integration)
   setUpDataCollector();
+  setUpRpiIntegration();
   setUpPresence();
-  xTaskCreate(MQTTTask, "MQTT Task", 10000, NULL, 1, NULL);
-  xTaskCreate(executeCurrentAction, "Execute a current action", 10000, NULL, 1, NULL);
+
+  // SetUp MQTT Receivers
+  xTaskCreate(MQTTTask, "MQTT Task", 10000, NULL, 4, NULL);
+  xTaskCreate(executeCurrentAction, "Execute a current action", 10000, NULL, 6, NULL);
 }
 
 
@@ -54,7 +59,7 @@ void MQTTTask(void *pvParameters) {
       reconnectMQTT();
     }
     mqttClient.loop();
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    vTaskDelay(100 / portTICK_PERIOD_MS);
   }
 }
 
@@ -63,14 +68,14 @@ void reconnectMQTT() {
   while (!mqttClient.connected()) {
     Serial.print("Attempting MQTT connection...");
     if (mqttClient.connect("ESP32Client")) {
-      Serial.println("connected");
       mqttClient.subscribe(TOPIC_DISTANCE_SENSOR_1);
       mqttClient.subscribe(TOPIC_DISTANCE_SENSOR_2);
-      mqttClient.subscribe(TOPIC_SENSOR_3_DATA);
+      mqttClient.subscribe(TOPIC_HEART);
+      mqttClient.subscribe(TOPIC_GALVANIC);
+      mqttClient.subscribe(TOPIC_RPI);
+      lcdPrint("MQTT Connected");
     } else {
-      Serial.print("failed, rc=");
-      Serial.print(mqttClient.state());
-      Serial.println(" try again in 5 seconds");
+      lcdPrint("MQTT ERR:" + String(mqttClient.state()));
       delay(5000);
     }
   }
@@ -94,14 +99,14 @@ void executeActionFromTopic(char *topic, String message) {
     float rightDist = message.toFloat();
     updateRightDistance(rightDist);
     updateA();
-  } else if (String(topic) == TOPIC_SENSOR_3_DATA) {
-    if (message.startsWith("Sensor Gsr: ")) {
-      float gsr = message.substring(12).toFloat();
-      updateGsr(gsr);
-    } else if (message.startsWith("Bpm: ")) {
-      float bpm = message.substring(5).toFloat();
-      updateBpm(bpm);
-    }
+  } else if (String(topic) == TOPIC_HEART) {
+    float bpm = message.toFloat();
+    updateBpm(bpm);
+  } else if (String(topic) == TOPIC_GALVANIC) {
+    float gsr = message.toFloat();
+    updateGsr(gsr);
+  } else if (String(topic) == TOPIC_RPI) {
+    updateName(message);
   }
 }
 
@@ -122,9 +127,13 @@ void executeCurrentAction(void *pvParameters) {
         executeActionHeart();
     } else if (action == Distance) {
         executeActionDistance();
-    } else {
-        lcdPrint("Nothing Received...");
+    } else if (action == None) {
+        int x = getNumberOfNoPackages();
+        lcdPrint("No Data: " + String(x));
         turnOffLeds();
+    } else if (action == Name) {
+        String name = getName();
+        lcdPrint("Is: " + name);
     }
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
