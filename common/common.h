@@ -1,3 +1,6 @@
+#ifndef COMMON_H_
+#define COMMON_H_
+
 // Wifi
 #define SSID_WIFI "privatered"
 #define SSID_PASSWORD "vfpk0135"
@@ -11,3 +14,5 @@
 #define TOPIC_RPI "rpi/prediction"
 #define TOPIC_HEART "sensor3/heart"
 #define TOPIC_GALVANIC "sensor3/galvanic"
+
+#endif // COMMON_H_
