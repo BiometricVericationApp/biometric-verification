@@ -2,6 +2,7 @@ import pandas as pd
 import joblib
 
 class DecisionTreeClassifier:
+    # TODO: Change the model_filename to the absolute path to make the service work
     def __init__(self, model_filename='decision_tree_checkpoint.joblib'):
         self.model_filename = model_filename
         self.encoder = None
@@ -11,6 +12,7 @@ class DecisionTreeClassifier:
         # Load the trained model
         self.loaded_model = joblib.load(self.model_filename)
         # Load the encoder from the training phase
+        # TODO: Change the path to the absolute path to make the service work
         self.encoder = joblib.load('onehot_encoder_checkpoint.joblib')
 
     def predict(self, input_str):

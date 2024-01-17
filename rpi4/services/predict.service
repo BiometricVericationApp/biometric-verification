@@ -1,5 +1,5 @@
 [Unit] 
-Description=Mosquitto MQTT Broker
+Description=Python inference process
 After=network.target
 
 [Service]

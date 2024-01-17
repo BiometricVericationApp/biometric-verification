@@ -7,8 +7,7 @@ import statistics
 
 FRAME_DELAY = 0.2
 OCCURENCE_THRESHOLD  = 10
-occurrences = Counter()
-confidences: dict[str, list[float]] = {}
+NO_OCCURENCE_THRESHOLD  = 25
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 model = "model.eim"
@@ -18,6 +17,8 @@ NO_LABEL = "No one from the allowed persons detected"
 
 def cam_inference() -> tuple[str, float | None]:
     with ImageImpulseRunner(model_file) as runner:
+        occurrences = Counter()
+        confidences: dict[str, list[float]] = {}
         label = ""
         mean_confidence = None
         try:
@@ -41,11 +42,13 @@ def cam_inference() -> tuple[str, float | None]:
                         label = NO_LABEL
                     finally:
                         occurrences[label] += 1
-                        if occurrences[label] == OCCURENCE_THRESHOLD:
-                            if label != NO_LABEL:
-                                mean_confidence = statistics.mean(confidences[label])
+                        if label == NO_LABEL and occurrences[label] == NO_OCCURENCE_THRESHOLD:
                             break
-                        time.sleep(FRAME_DELAY)
+                        elif label != NO_LABEL and occurrences[label] == OCCURENCE_THRESHOLD:
+                            mean_confidence = statistics.mean(confidences[label])
+                            break
+                        else:
+                            time.sleep(FRAME_DELAY)
 
         finally:
             if (runner):
