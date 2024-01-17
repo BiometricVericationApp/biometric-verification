@@ -7,8 +7,8 @@
 SemaphoreHandle_t bpmSemaphore;
 SemaphoreHandle_t gsrSemaphore;
 
-float actual_bpm;
-float actual_gsr;
+float bpm;
+float gsr;
 
 void setUpDataCollector() {
     bpmSemaphore = xSemaphoreCreateMutex();
@@ -16,34 +16,26 @@ void setUpDataCollector() {
 }
 
 
-void updateBpm(float bpm) {
+void updateBpm(float newBpm) {
   WITH_SEMAPHORE(bpmSemaphore, {
-    actual_bpm = bpm;
+    bpm = newBpm;
     updateAction(Heart);
   });
 }
 
 float getBpm() {
-  float bpm;
-  WITH_SEMAPHORE(bpmSemaphore, {
-    bpm = actual_bpm;
-  });
-  return bpm;
+    return RESOURCE_FROM_SEMAPHORE(bpmSemaphore, float, bpm);
 }
 
-void updateGsr(float gsr) {
+void updateGsr(float newGsr) {
   WITH_SEMAPHORE(gsrSemaphore, {
-    actual_gsr = gsr;
+    gsr = newGsr;
     updateAction(Heart);
   });
 }
 
 float getGsr() {
-  float gsr;
-  WITH_SEMAPHORE(gsrSemaphore, {
-    gsr = actual_gsr;
-  });
-  return gsr;
+    return RESOURCE_FROM_SEMAPHORE(gsrSemaphore, float, gsr);
 }
 
 #endif // USER_DATA_COLLECTOR_

@@ -21,11 +21,7 @@ void updateName(String newName) {
 }
 
 String getName() {
-  String retName;
-  WITH_SEMAPHORE(bpmSemaphore, {
-    retName = name;
-  });
-  return retName;
+ return RESOURCE_FROM_SEMAPHORE(nameSemaphore, String, name);
 }
 
 

@@ -13,4 +13,12 @@
     } \
     xSemaphoreGive(semaphore)
 
+#define RESOURCE_FROM_SEMAPHORE(sem, type, resource) ({ \
+    type value; \
+    WITH_SEMAPHORE(sem, { \
+        value = resource; \
+    }); \
+    value; \
+})
+
 #endif // LOCK_H_
